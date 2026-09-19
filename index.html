@@ -331,7 +331,7 @@ const nowDay = ()=> Math.floor(WORLD.totalMin/1440); // 游戏内"天"
    facts: 玩家提过、NPC 之后会"还记得"的事                          */
 const NPCS = [
   {
-    id:'linmo', name:'凛', he:false, hair:'#2e2e33', shirt:'#566168', accent:'#7d8890',
+    id:'linmo', name:'阿澄', he:false, hair:'#2e2e33', shirt:'#566168', accent:'#7d8890',
     posture:'hunched', phase:0.4,
     surface:['安静','礼貌','木讷'],
     inner:['害怕打扰别人','习惯独处','其实渴望被看见，但不敢'],
@@ -358,7 +358,7 @@ const NPCS = [
     }
   },
   {
-    id:'zhouye', name:'飒', he:true, hair:'#3a2a22', shirt:'#7a3b2e', accent:'#b5644a',
+    id:'zhouye', name:'江锐', he:true, hair:'#3a2a22', shirt:'#7a3b2e', accent:'#b5644a',
     posture:'crossed', phase:1.1,
     surface:['尖刻','直接','不耐烦'],
     inner:['害怕被看不起','用刺保护自尊','其实很怕被拒绝'],
@@ -386,7 +386,7 @@ const NPCS = [
     }
   },
   {
-    id:'aguo', name:'桃', he:false, hair:'#caa14a', shirt:'#5fae6a', accent:'#e6c45a',
+    id:'aguo', name:'桃奈', he:false, hair:'#caa14a', shirt:'#5fae6a', accent:'#e6c45a',
     posture:'relaxed', phase:2.0,
     surface:['开朗','爱开玩笑','爱分享'],
     inner:['其实也会累','用热闹盖住不安','真心喜欢生活'],
@@ -411,7 +411,7 @@ const NPCS = [
     }
   },
   {
-    id:'chenzhou', name:'渡', he:true, hair:'#26303a', shirt:'#46586b', accent:'#8aa0b8',
+    id:'chenzhou', name:'陈默', he:true, hair:'#26303a', shirt:'#46586b', accent:'#8aa0b8',
     posture:'tired', phase:0.9,
     surface:['疲惫','礼貌','话少'],
     inner:['害怕被替代','长期透支','不敢停下来'],
@@ -437,7 +437,7 @@ const NPCS = [
     }
   },
   {
-    id:'xiaoman', name:'舞', he:false, hair:'#6b4a8a', shirt:'#c98fb0', accent:'#e6c4dd',
+    id:'xiaoman', name:'苏冉', he:false, hair:'#6b4a8a', shirt:'#c98fb0', accent:'#e6c4dd',
     posture:'soft', phase:1.6,
     surface:['温和','爱读书','有点迷糊'],
     inner:['对将来没把握','怕让家人失望','喜欢小小的确定感'],
@@ -462,7 +462,7 @@ const NPCS = [
     }
   },
   {
-    id:'su', name:'秀', he:false, hair:'#1f1f24', shirt:'#3b3b46', accent:'#9a9ab0',
+    id:'su', name:'韩叙', he:false, hair:'#1f1f24', shirt:'#3b3b46', accent:'#9a9ab0',
     posture:'crossed', phase:0.2,
     surface:['傲慢','挑剔','毒舌'],
     inner:['怕被人看不起','用优越感盖住不安','其实很孤独'],
@@ -488,10 +488,10 @@ const NPCS = [
     }
   },
   {
-    id:'laowu', name:'茂', he:true, hair:'#9a9a9a', shirt:'#6b7d5a', accent:'#c2cba8',
+    id:'laowu', name:'茂伯', he:true, hair:'#9a9a9a', shirt:'#6b7d5a', accent:'#c2cba8',
     posture:'relaxed', phase:2.4,
     surface:['随和','话多','热心的邻居'],
-    inner:['老伴走了，习惯一个人','平淡里找滋味','喜欢有人喊他一声茂'],
+    inner:['老伴走了，习惯一个人','平淡里找滋味','喜欢有人喊他一声茂伯'],
     defenses:['合理化','情感隔离'],
     schedule:{start:8, end:10},
     voice:'gentle', baseMood:'平静',
@@ -513,7 +513,7 @@ const NPCS = [
     }
   },
   {
-    id:'ye', name:'宵', he:false, hair:'#222633', shirt:'#37425e', accent:'#6f7fa8',
+    id:'ye', name:'阿宥', he:false, hair:'#222633', shirt:'#37425e', accent:'#6f7fa8',
     posture:'hunched', phase:1.9,
     surface:['安静','疏离','夜行'],
     inner:['长期失眠','习惯观察别人','怕打扰也怕被靠近'],
@@ -621,7 +621,7 @@ const EVENTS = [
   {t:'有个常客今天没有出现。', absent:true},
   {t:'有人把一本书悄悄地放进了 Shelter。', mem:{who:'不知谁', what:'一本被翻旧的书'}, book:true},
   {t:'两个客人因为一件小事争执了几句，又各自散了。', argue:true},
-  {t:'夜里有猫在门口叫，茂顺手喂了它。', mem:{who:'茂', what:'门口的猫碗'}},
+  {t:'夜里有猫在门口叫，茂伯顺手喂了它。', mem:{who:'茂伯', what:'门口的猫碗'}},
   {t:'面包店今天多烤了一炉，香气漫进了店里。', flavor:'面包店的香气漫进了店里。'}
 ];
 
@@ -960,7 +960,7 @@ function openerFor(n, firstTime){
   const st = npcState(n);
   const isFirst = (firstTime!==undefined) ? firstTime : !st.met;
   if(isFirst){
-    // 初次见面：用专属开场（如飒"东西这么贵？"），绝不说"又来了"
+    // 初次见面：用专属开场（如江锐"东西这么贵？"），绝不说"又来了"
     const o = n.lines.opener_first || n.lines.opener || ['（看向你）'];
     return Array.isArray(o)?o:[o];
   }
@@ -1731,7 +1731,7 @@ function actionBtn(act){
     if(n.id==='linmo' && st.stage>=3) resp={beats:['（接过牛奶）','……谢谢。'],action:'cup',mood:1,trust:3,milestone:true};
   } else if(act==='space'){
     resp={beats:['（你们都没说话，但店里很安静）'],action:'idle',mood:0,trust:1};
-    // 纯陪伴：凛会记下
+    // 纯陪伴：阿澄会记下
     if(n.id==='linmo'){ st.trust=clamp(st.trust+1,-100,100); }
     st.traces.silentCompany=true;   // 痕迹：愿意沉默地陪在玩家旁边
   } else if(act==='sit'){
@@ -1750,7 +1750,7 @@ function actionBtn(act){
 const BOOKS=[
   {t:'《夜里的便利店》', by:'架上常客', note:'被翻得卷了边。'},
   {t:'《如何什么都不做》', by:'不知谁', note:'夹着一张电影票根。'},
-  {t:'《雨天的理由》', by:'舞', note:'第 41 页有铅笔线。'}
+  {t:'《雨天的理由》', by:'苏冉', note:'第 41 页有铅笔线。'}
 ];
 function openShelter(){
   $('#shelterPanel').style.display='flex';
