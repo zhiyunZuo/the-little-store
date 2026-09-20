@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>小小的店 · The Little Store</title>
+<script>
+window.__errShown=false;
+window.onerror=function(msg,src,line,col){
+  if(window.__errShown) return; window.__errShown=true;
+  try{
+    var d=document.getElementById("errOverlay");
+    if(!d){ d=document.createElement("div"); d.id="errOverlay"; document.body.appendChild(d); }
+    d.style.display="flex";
+    d.innerHTML='<div><b>页面出错了</b><br><span>'+(msg||"未知错误")+
+      '</span><br><small>'+(src?String(src).split("/").pop():"")+' : '+line+' : '+col+'</small></div>';
+  }catch(e){}
+};
+</script>
 <style>
   :root{
     --paper:#f3e6cf; --ink:#432f23; --warm:#e8a85c; --line:#caa97f;
@@ -133,6 +146,10 @@
     text-shadow:0 1px 3px #000;user-select:none;}
   #shelterSpot:hover{color:#f3e6cf;background:rgba(40,32,22,.35);}
   #shelterSpot .sofa{font-size:13px;margin-right:3px;vertical-align:-1px;}
+  #errOverlay{position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;
+    background:#1a1410;color:#f3e6cf;padding:24px;text-align:center;font-size:14px;line-height:1.8;}
+  #errOverlay b{color:#e8a85c;font-size:16px;}
+  #errOverlay small{color:#9a8a72;font-size:12px;}
 </style>
 </head>
 <body>
