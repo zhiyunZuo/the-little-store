@@ -65,7 +65,7 @@ window.onerror=function(msg,src,line,col){
   #opening{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
     background:#0a0806;text-align:center;padding:16px;z-index:30;cursor:pointer;overflow:hidden;transition:opacity .9s ease;}
   #opening.gone{opacity:0;pointer-events:none;}
-  #introStage{position:relative;width:min(92vw,440px);z-index:0;}
+  #introStage{position:relative;width:min(86vw,320px,54vh);z-index:0;}
   #introCanvas{width:100%;height:auto;border-radius:3px;display:block;}
   #introTitle{position:absolute;top:14%;left:0;right:0;text-align:center;font-size:14px;
     letter-spacing:.22em;color:rgba(243,230,207,0.82);opacity:0;
@@ -84,11 +84,11 @@ window.onerror=function(msg,src,line,col){
   #introBox.scene{color:#c9b48f;font-style:italic;}
   #introBox.sound{color:#9fb8d8;font-style:italic;}
   #introBox .ic{display:inline-block;width:9px;color:#e8a85c;animation:blink 1s steps(1) infinite;margin-left:3px;}
-  #introHint{position:absolute;right:6px;bottom:6px;color:rgba(184,152,104,.45);font-size:13px;animation:blink 1.4s steps(1) infinite;pointer-events:none;z-index:6;}
+  #introHint{position:absolute;right:10px;bottom:3px;color:rgba(184,152,104,.45);font-size:13px;animation:blink 1.4s steps(1) infinite;pointer-events:none;z-index:6;}
   #introFade{position:absolute;inset:0;background:#0a0806;opacity:0;pointer-events:none;z-index:1;}
-  #openDoorBtn{position:absolute;left:50%;transform:translateX(-50%);bottom:-44px;margin:0;padding:7px 26px;font-size:13px;letter-spacing:.18em;cursor:pointer;
+  #openDoorBtn{position:relative;display:none;width:fit-content;max-width:150px;margin:14px auto 0;padding:7px 26px;font-size:13px;letter-spacing:.18em;cursor:pointer;
     color:#3a2e1e;background:#b89868;border:1px solid #6b5236;border-radius:2px;
-    box-shadow:none;display:none;font-family:inherit;z-index:6;transition:background .15s,border-color .15s;}
+    box-shadow:none;font-family:inherit;z-index:6;transition:background .15s,border-color .15s;}
   #openDoorBtn:hover{background:#c4a87a;border-color:#7a5c38;}
   @keyframes blink{50%{opacity:0;}}
   #making{position:absolute;inset:0;background:rgba(8,10,16,.9);display:flex;flex-direction:column;
@@ -173,8 +173,7 @@ window.onerror=function(msg,src,line,col){
       <div id="introStage">
         <canvas id="introCanvas" width="360" height="200"></canvas>
         <div id="introTitle"></div>
-        <div id="introBox"><span id="introText"></span></div>
-        <div id="introHint">点击继续 ▾</div>
+        <div id="introBox"><span id="introText"></span><div id="introHint">点击继续 ▾</div></div>
         <button id="openDoorBtn">开门</button>
       </div>
       <div id="introFade"></div>
