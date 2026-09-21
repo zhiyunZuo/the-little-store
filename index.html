@@ -62,10 +62,10 @@ window.onerror=function(msg,src,line,col){
   .closeX{position:absolute;top:10px;right:14px;font-size:20px;color:#b6a487;cursor:pointer;}
   .closeX:hover{color:#f0dcbb;}
   /* ---------- Opening（电影式开场，原始版本） ---------- */
-  #opening{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:#0a0806;text-align:center;padding:16px;z-index:30;cursor:pointer;overflow:hidden;transition:opacity .9s ease;}
+  #opening{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    background:#0a0806;text-align:center;padding:14px;z-index:30;cursor:pointer;overflow:auto;transition:opacity .9s ease;}
   #opening.gone{opacity:0;pointer-events:none;}
-  #introStage{position:relative;width:min(86vw,320px,54vh);z-index:0;}
+  #introStage{position:relative;width:min(84vw,300px,46vh);margin:auto;z-index:0;}
   #introCanvas{width:100%;height:auto;border-radius:3px;display:block;}
   #introTitle{position:absolute;top:14%;left:0;right:0;text-align:center;font-size:14px;
     letter-spacing:.22em;color:rgba(243,230,207,0.82);opacity:0;
@@ -77,18 +77,18 @@ window.onerror=function(msg,src,line,col){
     64%{opacity:1;}
     100%{opacity:0;}
   }
-  #introBox{position:relative;width:100%;min-height:54px;z-index:5;margin-top:8px;
-    padding:15px 20px;background:rgba(16,12,8,.82);border:1px solid rgba(180,152,104,.25);border-radius:3px;
-    color:#f3e6cf;font-size:clamp(15px,4.4vw,18px);line-height:1.9;letter-spacing:.04em;text-align:center;
+  #introBox{position:relative;width:100%;min-height:40px;z-index:5;margin-top:6px;
+    padding:10px 14px;background:rgba(16,12,8,.82);border:1px solid rgba(180,152,104,.25);border-radius:3px;
+    color:#f3e6cf;font-size:clamp(13px,3.6vw,15px);line-height:1.65;letter-spacing:.03em;text-align:center;
     box-shadow:0 4px 18px rgba(0,0,0,.35);}
   #introBox.scene{color:#c9b48f;font-style:italic;}
   #introBox.sound{color:#9fb8d8;font-style:italic;}
   #introBox .ic{display:inline-block;width:9px;color:#e8a85c;animation:blink 1s steps(1) infinite;margin-left:3px;}
   #introHint{position:absolute;right:10px;bottom:3px;color:rgba(184,152,104,.45);font-size:13px;animation:blink 1.4s steps(1) infinite;pointer-events:none;z-index:6;}
   #introFade{position:absolute;inset:0;background:#0a0806;opacity:0;pointer-events:none;z-index:1;}
-  #openDoorBtn{position:relative;display:none;width:fit-content;max-width:150px;margin:14px auto 0;padding:7px 26px;font-size:13px;letter-spacing:.18em;cursor:pointer;
+  #openDoorBtn{position:relative;display:none;width:fit-content;max-width:150px;margin:10px auto 0;padding:6px 24px;font-size:13px;letter-spacing:.18em;cursor:pointer;
     color:#3a2e1e;background:#b89868;border:1px solid #6b5236;border-radius:2px;
-    box-shadow:none;font-family:inherit;z-index:6;transition:background .15s,border-color .15s;}
+    box-shadow:none;font-family:inherit;z-index:6;transition:background .15s,border-color .15s;flex:none;}
   #openDoorBtn:hover{background:#c4a87a;border-color:#7a5c38;}
   @keyframes blink{50%{opacity:0;}}
   #making{position:absolute;inset:0;background:rgba(8,10,16,.9);display:flex;flex-direction:column;
