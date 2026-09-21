@@ -77,14 +77,14 @@ window.onerror=function(msg,src,line,col){
     64%{opacity:1;}
     100%{opacity:0;}
   }
-  #introBox{position:relative;width:100%;min-height:40px;z-index:5;margin-top:6px;
-    padding:10px 14px;background:rgba(16,12,8,.82);border:1px solid rgba(180,152,104,.25);border-radius:3px;
-    color:#f3e6cf;font-size:clamp(13px,3.6vw,15px);line-height:1.65;letter-spacing:.03em;text-align:center;
+  #introBox{position:relative;width:100%;min-height:32px;z-index:5;margin-top:5px;
+    padding:8px 12px;background:rgba(16,12,8,.82);border:1px solid rgba(180,152,104,.25);border-radius:3px;
+    color:#f3e6cf;font-size:clamp(12px,3.2vw,14px);line-height:1.55;letter-spacing:.03em;text-align:center;
     box-shadow:0 4px 18px rgba(0,0,0,.35);}
   #introBox.scene{color:#c9b48f;font-style:italic;}
   #introBox.sound{color:#9fb8d8;font-style:italic;}
   #introBox .ic{display:inline-block;width:9px;color:#e8a85c;animation:blink 1s steps(1) infinite;margin-left:3px;}
-  #introHint{position:absolute;right:10px;bottom:3px;color:rgba(184,152,104,.45);font-size:13px;animation:blink 1.4s steps(1) infinite;pointer-events:none;z-index:6;}
+  #introHint{position:absolute;right:8px;bottom:2px;color:rgba(184,152,104,.45);font-size:12px;animation:blink 1.4s steps(1) infinite;pointer-events:none;z-index:6;}
   #introFade{position:absolute;inset:0;background:#0a0806;opacity:0;pointer-events:none;z-index:1;}
   #openDoorBtn{position:relative;display:none;width:fit-content;max-width:150px;margin:10px auto 0;padding:6px 24px;font-size:13px;letter-spacing:.18em;cursor:pointer;
     color:#3a2e1e;background:#b89868;border:1px solid #6b5236;border-radius:2px;
@@ -936,7 +936,7 @@ $("opening").onclick=()=>{ if(introDoorShown) return; advanceIntro(); };
 $("openDoorBtn").onclick=(e)=>{ e.stopPropagation(); openDoor(); };
 
 /* ---------- 开场 / 开门 ---------- */
-function fitStage(){ const s=Math.min(window.innerWidth/W, window.innerHeight/H); stage.style.transform="scale("+s+")"; }
+function fitStage(){ const s=Math.min(window.innerWidth/W, window.innerHeight/H, 1.6); stage.style.transform="scale("+s+")"; }
 window.addEventListener("resize", fitStage);
 function showReturnMsg(){
   const msgs=["昨晚你把Shelter的灯留到了很晚。","今天的店里，应该会比昨天暖和一点。","风把门口的伞吹倒了，又自己站了回去。","昨天的便签还在墙上，你写的那张在最上面。"];
