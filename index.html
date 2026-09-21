@@ -279,10 +279,32 @@ const DEFAULT_STATE = {
 };
 let S = load();
 function load(){
-  try{ const r = JSON.parse(localStorage.getItem(SAVE_KEY)); if(r&&r.day) return Object.assign({},DEFAULT_STATE,r);}catch(e){}
-  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  // 基准默认态（深拷贝，避免污染 DEFAULT_STATE）
+  const s = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  try{
+    const r = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if(r && typeof r === "object") Object.assign(s, r);
+  }catch(e){}
+  // 规范化嵌套结构：旧版 / 损坏存档若字段类型不对，强制纠正，避免运行时崩溃（主要是便签墙与书架）
+  s.notes = (s.notes && typeof s.notes === "object" && !Array.isArray(s.notes))
+    ? { player: Array.isArray(s.notes.player)?s.notes.player:[], npc: Array.isArray(s.notes.npc)?s.notes.npc:[] }
+    : { player: [], npc: [] };
+  s.books = Array.isArray(s.books) ? s.books.filter(x=>typeof x === "string") : [];
+  s.unlocked = Array.isArray(s.unlocked) ? s.unlocked.filter(x=>typeof x === "string") : ["热牛奶","咖啡","柠檬茶"];
+  s.seenEvents = Array.isArray(s.seenEvents) ? s.seenEvents : [];
+  s.npcLast = (s.npcLast && typeof s.npcLast === "object") ? s.npcLast : {};
+  s.diary = (s.diary && typeof s.diary === "object" && !Array.isArray(s.diary)) ? s.diary : {};
+  if(typeof s.minutes !== "number" || isNaN(s.minutes)) s.minutes = 480;
+  if(typeof s.day !== "number" || isNaN(s.day)) s.day = 1;
+  if(typeof s.weather !== "string") s.weather = "晴";
+  if(typeof s.storeOpen !== "boolean") s.storeOpen = false;
+  if(typeof s.shelterLamp !== "boolean") s.shelterLamp = false;
+  if(typeof s.mute !== "boolean") s.mute = false;
+  if(typeof s.dateStr !== "string") s.dateStr = "";
+  if(typeof s.lastLeave !== "string") s.lastLeave = "";
+  return s;
 }
-function save(){ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }
+function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
 
 /* ---------- 天气 / 时间 ---------- */
 const WEATHERS = ["晴","小雨","阴","雾"];
