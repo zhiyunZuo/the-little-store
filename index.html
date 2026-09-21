@@ -358,7 +358,7 @@ let customers = [];
 let cidSeq = 1;
 function presentIds(){ return customers.map(c=>c.ch.id); }
 function spawnCustomer(ch){
-  const isVisitor = Math.random()<ch.vChance;
+  let isVisitor = Math.random()<ch.vChance;
   let need=null, kind=null;
   if(!isVisitor){
     if(ch.drink.length && Math.random()<0.62 && ch.drink.some(d=>S.unlocked.includes(d))){
@@ -535,6 +535,13 @@ let subTimer=null;
 function narrate(text){
   const el=$("subtitle"); el.textContent=text; el.classList.add("show");
   clearTimeout(subTimer); subTimer=setTimeout(()=>el.classList.remove("show"), 5200);
+}
+let toastTimer=null;
+function toast(msg){
+  const el=$("toast"); if(!el) return;
+  el.textContent=msg; el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{ if(el) el.classList.remove("show"); }, 1800);
 }
 function maybeNarrationSpawn(ch,c){
   if(c.isVisitor && Math.random()<0.4) narrate(ch.name+"今天只是想进来坐一会儿。");
