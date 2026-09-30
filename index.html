@@ -259,7 +259,6 @@ window.onerror=function(msg,src,line,col){
         </div>
         <div class="row">
           <button class="btn" id="noteAdd">留下便签</button>
-          <button class="btn ghost" id="noteClose">关上墙</button>
         </div>
       </div>
     </div>
@@ -899,7 +898,6 @@ function renderNotes(){
   $("notesList").querySelectorAll(".del").forEach(d=>d.onclick=()=>{ const i=+d.dataset.i; const pIndex = i - S.notes.npc.length; if(pIndex>=0&&pIndex<S.notes.player.length){ S.notes.player.splice(pIndex,1); save(); renderNotes(); } });
 }
 $("noteAdd").onclick=()=>{ const v=$("noteInput").value.trim(); if(!v) return; S.notes.player.push({text:v, who:"你", ts:Date.now()}); $("noteInput").value=""; save(); renderNotes(); sfx("cup"); };
-$("noteClose").onclick=()=>$("notes").classList.add("hidden");
 function escapeHtml(s){ return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
 
 /* ---------- 手账 ---------- */
