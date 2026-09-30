@@ -53,6 +53,7 @@ window.onerror=function(msg,src,line,col){
   .overlay{position:absolute;inset:0;background:rgba(10,12,18,.86);backdrop-filter:blur(2px);
     display:flex;align-items:center;justify-content:center;flex-direction:column;padding:18px;z-index:20;}
   .overlay.hidden{display:none;}
+  .hidden{display:none !important;}
   .card{background:var(--panel);border:1px solid #4a3a28;border-radius:10px;padding:16px 18px;
     width:420px;max-width:92%;max-height:88%;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.5);position:relative;}
   .card h2{margin:0 0 10px;font-size:15px;color:#f0dcbb;font-weight:600;letter-spacing:1px;}
@@ -146,6 +147,20 @@ window.onerror=function(msg,src,line,col){
     text-shadow:0 1px 3px #000;user-select:none;}
   #shelterSpot:hover{color:#f3e6cf;background:rgba(40,32,22,.35);}
   #shelterSpot .sofa{font-size:13px;margin-right:3px;vertical-align:-1px;}
+
+  /* ---- Shelter 角落：坐下后进入的空间 ---- */
+  #shelterCard{width:432px;padding:14px 16px;}
+  #sceneWrap{position:relative;width:100%;line-height:0;border-radius:8px;overflow:hidden;}
+  #shelterCanvas{width:100%;height:auto;display:block;image-rendering:pixelated;
+    border:1px solid #4a3a28;border-radius:8px;}
+  .spot{position:absolute;transform:translate(-50%,-50%);font-family:inherit;font-size:11px;
+    letter-spacing:.6px;color:#f3e6cf;background:rgba(26,20,15,.82);
+    border:1px solid rgba(180,152,104,.5);border-radius:12px;padding:4px 10px;cursor:pointer;
+    white-space:nowrap;transition:.25s;box-shadow:0 2px 10px rgba(0,0,0,.45);}
+  .spot:hover{background:rgba(62,49,33,.96);border-color:#b89868;color:#fff8ec;}
+  .scenePanel{max-height:148px;overflow:auto;margin-top:2px;}
+  .scenePanel h3{font-size:13px;color:#f0dcbb;margin:2px 0 8px;font-weight:600;letter-spacing:1px;}
+  #shelterScene .row{margin-top:9px;justify-content:flex-end;}
   #errOverlay{position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;
     background:#1a1410;color:#f3e6cf;padding:24px;text-align:center;font-size:14px;line-height:1.8;}
   #errOverlay b{color:#e8a85c;font-size:16px;}
@@ -186,21 +201,41 @@ window.onerror=function(msg,src,line,col){
       <div class="card" id="makeMenuCard"></div>
     </div>
     <div id="shelter" class="overlay hidden">
-      <div class="card">
+      <div class="card" id="shelterCard">
         <span class="closeX" data-close="shelter">×</span>
-        <h2>Shelter · 一个可以暂时不赶路的地方</h2>
-        <p class="small">靠窗的小角落。沙发、木桌、暖灯，还有一面可以贴便利贴的墙，和一个慢慢变丰富的书架。</p>
-        <div class="row">
-          <button class="btn" id="sSit">坐下歇会儿</button>
-          <button class="btn" id="sRead">看书架</button>
-          <button class="btn" id="sWall">看便签墙</button>
-          <button class="btn" id="sNote">写一张便签</button>
-          <button class="btn ghost" id="sLeave">离开</button>
+        <!-- 阶段一：还没坐下，只能先坐下 -->
+        <div id="shelterEnter">
+          <h2>Shelter · 一个可以暂时不赶路的地方</h2>
+          <p class="small">靠窗的小角落。沙发、木桌、暖灯，还有一面可以贴便利贴的墙，和一个慢慢变丰富的书架。</p>
+          <div class="row">
+            <button class="btn" id="sSit">坐下歇会儿</button>
+            <button class="btn ghost" id="sLeave">离开</button>
+          </div>
         </div>
-        <div id="shelterBody"></div>
+        <!-- 阶段二：坐下之后，真正进入这个角落 -->
+        <div id="shelterScene" class="hidden">
+          <div id="sceneWrap">
+            <canvas id="shelterCanvas" width="400" height="160"></canvas>
+            <!-- 按键分别落在：书架上 / 便签墙上 / 桌子上 -->
+            <button class="spot" id="spotShelf" style="left:15%;top:53%">看书架</button>
+            <button class="spot" id="spotWall" style="left:44%;top:40%">便签墙</button>
+            <button class="spot" id="spotNote" style="left:45.5%;top:75%">写便签</button>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="sStand">起身离开</button>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="bookModal" class="overlay hidden">
+    <div id="shelfPanel" class="overlay hidden" style="z-index:22">
+      <div class="card">
+        <span class="closeX" data-close="shelfPanel">×</span>
+        <h2>书架</h2>
+        <p class="small">慢慢翻。遇见一本就带走一本，或者只是记住它。</p>
+        <div id="shelfList"></div>
+      </div>
+    </div>
+    <div id="bookModal" class="overlay hidden" style="z-index:24">
       <div class="card">
         <span class="closeX" data-close="bookModal">×</span>
         <h2 id="bkTitle"></h2>
@@ -711,18 +746,148 @@ $("btnDiary").onclick=openDiary;
 $("btnMute").onclick=()=>{ S.mute=!S.mute; save(); $("btnMute").classList.toggle("muted", S.mute); if(!S.mute) audio(); };
 
 /* ---------- Shelter ---------- */
-let shelterIntro=false;
+let shelterIntro=false, shelterSat=false;
 function openShelter(){
+  if(making) return;
   if(!shelterIntro){ shelterIntro=true; narrate("这是店里的小角落。没有人规定它该叫什么，后来大家叫它 Shelter——一个可以暂时不赶路的地方。"); }
   S.shelterLamp=true; save();
   $("shelter").classList.remove("hidden");
-  $("shelterBody").innerHTML="";
+  // 每次进来都回到"还没坐下"的状态
+  shelterSat=false;
+  $("shelterEnter").classList.remove("hidden");
+  $("shelterScene").classList.add("hidden");
+  $("shelfPanel").classList.add("hidden"); $("shelfList").innerHTML="";
+  sfx("door");
 }
-$("sRead").onclick=()=>{ sfx("page"); let h='<h2 style="font-size:14px;margin:8px 0 4px">书架</h2>'; BOOKS.forEach(b=>{ const on=S.books.includes(b.id); h+='<div class="book" onclick="openBookModal(BOOKS.find(x=>x.id===\''+b.id+'\'))"><div class="t">'+b.t+'</div><div class="a">'+b.a+(on?' · 已收藏':'')+'</div></div>'; }); $("shelterBody").innerHTML=h; };
-$("sWall").onclick=()=>{ renderNotes(); $("notes").classList.remove("hidden"); };
-$("sNote").onclick=()=>{ renderNotes(); $("notes").classList.remove("hidden"); setTimeout(()=>$("noteInput").focus(),50); };
-$("sSit").onclick=()=>{ narrate("你坐了下来。窗外的光很安静，店里的暖灯一直亮着。"); };
-$("sLeave").onclick=()=>{ $("shelter").classList.add("hidden"); };
+function closeShelter(){ $("shelter").classList.add("hidden"); }
+$("sSit").onclick=()=>{
+  shelterSat=true;
+  narrate("你坐了下来。窗外的光很安静，店里的暖灯一直亮着。");
+  sfx("cup");
+  $("shelterEnter").classList.add("hidden");
+  $("shelterScene").classList.remove("hidden");
+  $("shelfPanel").classList.add("hidden"); $("shelfList").innerHTML="";
+  drawShelter();
+};
+$("sLeave").onclick=closeShelter;
+$("sStand").onclick=closeShelter;
+// 按键 · 在书架上
+$("spotShelf").onclick=()=>{
+  sfx("page");
+  const p=$("shelfList");
+  let h="";
+  BOOKS.forEach(b=>{ const on=S.books.includes(b.id);
+    h+='<div class="book" data-id="'+b.id+'"><div class="t">'+b.t+(on?' <span class="collected">已收藏</span>':'')+
+       '</div><div class="a">文 / '+b.a+'</div><div class="i">'+b.i+'</div><div class="r">'+b.r+'</div></div>'; });
+  p.innerHTML=h;
+  p.querySelectorAll(".book").forEach(el=>el.onclick=()=>{ const b=BOOKS.find(x=>x.id===el.dataset.id); if(b) openBookModal(b); });
+  $("shelfPanel").classList.remove("hidden");
+};
+// 按键 · 在便签墙上
+$("spotWall").onclick=()=>{ sfx("page"); renderNotes(); $("notes").classList.remove("hidden"); };
+// 按键 · 在桌上
+$("spotNote").onclick=()=>{ sfx("cup"); renderNotes(); $("notes").classList.remove("hidden"); setTimeout(()=>$("noteInput").focus(),60); };
+
+/* ---------- Shelter 场景：书架 / 便签墙 / 桌子 / 沙发 / 窗 / 暖灯 ---------- */
+function drawShelter(){
+  const cv=$("shelterCanvas"); if(!cv) return;
+  const x=cv.getContext("2d"); if(!x) return;
+  const W=400,H=160;
+  x.clearRect(0,0,W,H);
+  // 墙 / 踢脚线 / 地板
+  x.fillStyle="#241b13"; x.fillRect(0,0,W,126);
+  x.fillStyle="#4a3826"; x.fillRect(0,124,W,4);
+  x.fillStyle="#1a140e"; x.fillRect(0,128,W,H-128);
+  x.fillStyle="rgba(0,0,0,.18)";
+  for(let i=0;i<5;i++){ x.fillRect(0,132+i*6,W,1); }
+
+  // 窗（右上）：下雨 / 晴夜
+  x.fillStyle="#3a2e1e"; x.fillRect(250,26,86,56);
+  x.fillStyle="#16203a"; x.fillRect(254,30,78,48);
+  if(S.weather.includes("雨")){
+    x.strokeStyle="rgba(150,180,210,.35)"; x.lineWidth=1;
+    for(let i=0;i<9;i++){ const rx=258+i*8, ry=32+(i%3)*12; x.beginPath(); x.moveTo(rx,ry); x.lineTo(rx-3,ry+9); x.stroke(); }
+  } else {
+    x.fillStyle="rgba(240,228,200,.5)"; x.beginPath(); x.arc(322,42,5,0,7); x.fill();
+    x.fillStyle="rgba(240,228,200,.28)"; x.fillRect(272,36,2,2); x.fillRect(286,52,2,2); x.fillRect(300,38,2,2);
+  }
+  x.fillStyle="#3a2e1e"; x.fillRect(292,30,2,48); x.fillRect(254,52,78,2);
+  x.fillStyle="#4a3826"; x.fillRect(246,82,94,4);
+
+  // 书架（左）：收藏的书越多，书越密
+  x.fillStyle="#4a3826"; x.fillRect(16,26,88,118);
+  x.fillStyle="#2a2018"; x.fillRect(20,30,80,110);
+  const spine=["#7a5c48","#8a6a4a","#6b5a7a","#5a6b7a","#7a6b4a","#6b4a4a","#4a6b5a","#8a5c5c"];
+  const rows=[30,57,83,109];
+  const extra=Math.min(S.books.length,8);
+  rows.forEach((ry,ri)=>{
+    x.fillStyle="#5a4430"; x.fillRect(20,ry+22,80,3);
+    let bx=24; const count=4+((ri+extra)%3);
+    for(let i=0;i<count && bx<96;i++){
+      const bw=4+((i*3+ri)%4);
+      x.fillStyle=spine[(i+ri*3)%spine.length];
+      x.fillRect(bx,ry+4,bw,18);
+      if(i%2===0){ x.fillStyle="rgba(255,255,255,.06)"; x.fillRect(bx,ry+4,bw,3); }
+      bx+=bw+1;
+    }
+  });
+
+  // 便签墙（中上）：便签越多，墙上越热闹
+  x.fillStyle="#3a2e1e"; x.fillRect(116,28,122,74);
+  x.fillStyle="#6b5636"; x.fillRect(118,30,118,70);
+  const total=S.notes.npc.length+S.notes.player.length;
+  const n=Math.min(2+total,9);
+  const nc=["#d9c98a","#d9b089","#a3b8cc","#b8cc9f","#cc9fb0","#c9b48a","#a8c4c9"];
+  for(let i=0;i<n;i++){
+    const col=i%3, row=Math.floor(i/3);
+    const nx=124+col*38, ny=36+row*22+(i%2?2:0);
+    x.fillStyle="rgba(0,0,0,.18)"; x.fillRect(nx+1,ny+1,26,16);
+    x.fillStyle=nc[i%nc.length]; x.fillRect(nx,ny,26,16);
+    x.fillStyle="rgba(90,70,45,.35)"; x.fillRect(nx+4,ny+5,18,1); x.fillRect(nx+4,ny+9,14,1);
+  }
+
+  // 地毯 + 桌子（中下）：杯子 / 本子 / 笔 / 小盆栽
+  x.fillStyle="#2e2318"; x.fillRect(118,140,124,10);
+  x.fillStyle="#5a4430"; x.fillRect(132,126,6,26); x.fillRect(226,126,6,26);
+  x.fillStyle="#6b5236"; x.fillRect(126,116,112,7);
+  x.fillStyle="rgba(0,0,0,.25)"; x.fillRect(126,123,112,2);
+  x.fillStyle="#e9e2d4"; x.fillRect(140,104,15,12);
+  x.fillStyle="#fff"; x.fillRect(142,106,11,8);
+  x.fillStyle="rgba(232,168,92,.25)"; x.fillRect(142,106,11,3);
+  x.fillStyle="#e9e2d4"; x.fillRect(155,107,3,5);
+  x.fillStyle="rgba(243,230,207,.26)"; x.fillRect(144,99,1,4); x.fillRect(149,97,1,5);
+  x.fillStyle="#c8b48a"; x.fillRect(170,108,30,8);
+  x.fillStyle="#e8dcc0"; x.fillRect(172,109,26,6);
+  x.fillStyle="#8a7a5c"; x.fillRect(204,112,16,2);
+  x.fillStyle="#6b5236"; x.fillRect(226,106,10,8);
+  x.fillStyle="#6b7a4a"; x.fillRect(228,100,6,6); x.fillRect(230,97,2,3);
+
+  // 沙发（右）+ 坐下的店长
+  x.fillStyle="#4a3428"; x.fillRect(250,96,142,16);
+  x.fillStyle="#5a4030"; x.fillRect(254,112,134,14);
+  x.fillStyle="#6b4c38"; x.fillRect(250,106,10,28); x.fillRect(382,106,10,28);
+  x.fillStyle="rgba(255,255,255,.05)"; x.fillRect(268,113,58,4); x.fillRect(330,113,52,4);
+  x.fillStyle="#3a2a1e"; x.fillRect(258,140,5,6); x.fillRect(379,140,5,6);
+  x.fillStyle="#3a2a1e"; x.fillRect(297,86,12,4);
+  x.fillStyle="#e8c9a8"; x.fillRect(298,90,10,10);
+  x.fillStyle="#7a6a52"; x.fillRect(296,100,14,15);
+  x.fillStyle="#e8c9a8"; x.fillRect(292,102,4,10); x.fillRect(310,102,4,10);
+  x.fillStyle="#4a3a2a"; x.fillRect(299,115,5,18); x.fillRect(307,115,5,18);
+
+  // 吊灯 + 暖光 + 边角压暗
+  x.fillStyle="#3a2e1e"; x.fillRect(207,0,2,14);
+  x.fillStyle="#7a5c38"; x.fillRect(198,14,20,4); x.fillRect(202,18,12,6);
+  x.fillStyle="#e8a85c"; x.fillRect(204,22,8,3);
+  const g=x.createRadialGradient(208,26,8,208,26,200);
+  g.addColorStop(0,"rgba(232,168,92,.16)");
+  g.addColorStop(.55,"rgba(232,168,92,.06)");
+  g.addColorStop(1,"rgba(232,168,92,0)");
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  const v=x.createRadialGradient(200,80,60,200,80,240);
+  v.addColorStop(0,"rgba(0,0,0,0)");
+  v.addColorStop(1,"rgba(0,0,0,.45)");
+  x.fillStyle=v; x.fillRect(0,0,W,H);
+}
 
 /* ---------- 便签墙 ---------- */
 function renderNotes(){
