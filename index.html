@@ -104,6 +104,10 @@ window.onerror=function(msg,src,line,col){
   .book .i{font-size:12px;color:#cdbb9c;margin-top:6px;line-height:1.6;}
   .book .r{font-size:12px;color:#e8c08a;margin-top:6px;}
   .collected{color:#8fcf9a !important;}
+  .mc-div{border:none;border-top:1px dashed #4a3a28;margin:14px 2px 6px;}
+  .mc-sub{font-size:12.5px;color:#e8c08a;margin:6px 2px 2px;font-weight:600;}
+  .book.learn{border-style:dashed;border-color:#5f8f6a;background:#1d241a;}
+  .book.learn .a{color:#8fcf9a;}
   .qbox{margin:10px 0 4px;padding:12px 14px;background:#221a12;border:1px solid #4a3a28;border-radius:10px;}
   .qcap{font-size:11px;color:#a98f6d;text-align:center;letter-spacing:2px;margin-bottom:8px;}
   .qbox blockquote{margin:0;padding:0 4px;font-size:13px;line-height:1.75;color:#f0dcbb;min-height:3.2em;
@@ -364,11 +368,6 @@ function newDay(){
     if(S.dateStr !== "") S.day += 1;
     S.dateStr = today; S.minutes = 480; S.storeOpen=false;
     S.weather = pick(WEATHERS);
-    // 慢慢解锁饮品
-    if(S.unlocked.length < ALL_DRINKS.length && Math.random()<0.7){
-      const next = ALL_DRINKS.find(d=>!S.unlocked.includes(d));
-      if(next) S.unlocked.push(next);
-    }
   }
 }
 function hour(){ return S.minutes/60; }
@@ -498,31 +497,59 @@ function doCheckout(){
 /* ---------- 制作饮品 ---------- */
 let making=null;
 const MAKE_DUR=4600;
-function startMake(drink, cust){
+const LEARN_DUR=5200;
+function startMake(drink, cust, learn){
   if(making) return;
-  making={drink, start:performance.now(), dur:MAKE_DUR, cust};
+  making={drink, start:performance.now(), dur: learn?LEARN_DUR:MAKE_DUR, learn:!!learn, cust};
   $("making").classList.remove("hidden");
-  $("makeHint").textContent = "做一杯 "+drink+"…";
+  $("makeHint").textContent = learn ? ("学做一杯 "+drink+"…") : ("做一杯 "+drink+"…");
   sfx("pour");
 }
 function finishMake(){
   const m=making; making=null;
   $("making").classList.add("hidden");
-  if(m.cust && !m.cust.left){ m.cust.made=true; }
-  toast("好了 ☕");
-  sfx("cup");
+  if(m.learn){
+    if(!S.unlocked.includes(m.drink)){ S.unlocked.push(m.drink); save(); }
+    toast("学会了 "+m.drink+" ☕");
+    sfx("cup");
+    narrate("你照着步骤试了一次，"+m.drink+"好像也没那么难了。");
+  } else {
+    if(m.cust && !m.cust.left){ m.cust.made=true; }
+    toast("好了 ☕");
+    sfx("cup");
+  }
 }
 function makeAutoSelect(){
   const w = customers.find(c=>c.state==="waiting");
   if(w){ startMake(w.need, w); return; }
   openMakeMenu();
 }
+function freeNow(){
+  return S.storeOpen && !making && !customers.some(c=>c.state==="waiting"||c.state==="atCounter");
+}
+function startLearn(d){
+  if(making) return;
+  if(!freeNow()){ toast("现在有点忙，等客人走了再学"); return; }
+  if(S.unlocked.includes(d)) return;
+  startMake(d, null, true);
+}
 function openMakeMenu(){
   let html='<span class="closeX" data-close="makeMenu">×</span><h2>今天想做点什么</h2>';
   S.unlocked.forEach(d=>{ html+='<div class="book" data-d="'+d+'"><div class="t">'+(DRINK_EMOJI[d]||"")+' '+d+'</div></div>'; });
+  const locked = ALL_DRINKS.filter(d=>!S.unlocked.includes(d));
+  if(locked.length){
+    const free = freeNow();
+    html+='<div class="mc-div"></div><h3 class="mc-sub">想学一道新饮品'+(free?'':'（先顾着客人，空闲时再学）')+'</h3>';
+    if(free){
+      locked.forEach(d=>{ html+='<div class="book learn" data-learn="'+d+'"><div class="t">＋ '+(DRINK_EMOJI[d]||"")+' '+d+'</div><div class="a">学一学</div></div>'; });
+    } else {
+      html+='<p class="small">客人还在等，先顾着眼前的事吧。</p>';
+    }
+  }
   const mm=$("makeMenuCard"); mm.innerHTML=html;
   $("makeMenu").classList.remove("hidden");
-  mm.querySelectorAll(".book").forEach(el=>el.onclick=()=>{ startMake(el.dataset.d,null); $("makeMenu").classList.add("hidden"); });
+  mm.querySelectorAll(".book[data-d]").forEach(el=>el.onclick=()=>{ startMake(el.dataset.d,null); $("makeMenu").classList.add("hidden"); });
+  mm.querySelectorAll(".book.learn").forEach(el=>el.onclick=()=>{ startLearn(el.dataset.learn); $("makeMenu").classList.add("hidden"); });
 }
 
 /* ---------- 饮品制作动画（Canvas，3~6秒） ---------- */
@@ -1270,6 +1297,11 @@ function frame(now){
   $("btnCheck").classList.toggle("hide", !atCounter);
   $("btnDiary").classList.toggle("hide", !S.storeOpen);
   $("shelterSpot").classList.toggle("hide", !S.storeOpen);
+  // 一次性空闲学习提示
+  if(freeNow() && ALL_DRINKS.some(d=>!S.unlocked.includes(d)) && !S.seenEvents.includes("learntip") && !making){
+    S.seenEvents.push("learntip"); save();
+    setTimeout(()=>narrate("客人还没来。这种空档正好可以学做一道新饮品——点「制作饮品」就能看到想学的。"), 800);
+  }
   requestAnimationFrame(frame);
 }
 
