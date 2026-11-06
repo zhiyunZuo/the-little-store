@@ -176,49 +176,6 @@ window.onerror=function(msg,src,line,col){
     background:#1a1410;color:#f3e6cf;padding:24px;text-align:center;font-size:14px;line-height:1.8;}
   #errOverlay b{color:#e8a85c;font-size:16px;}
   #errOverlay small{color:#9a8a72;font-size:12px;}
-
-  /* ---- 语言切换按钮 ---- */
-  #hud #btnLang{display:block;margin-top:7px;pointer-events:auto;
-    font-family:inherit;font-size:12px;color:#e9dcc6;background:rgba(233,220,198,.12);
-    border:1px solid rgba(233,220,198,.25);border-radius:10px;padding:3px 9px;cursor:pointer;
-    transition:.2s;letter-spacing:.5px;min-width:54px;text-align:center;}
-  #hud #btnLang:hover{background:rgba(233,220,198,.22);}
-
-  /* ---- 玩法引导层 ---- */
-  #howto{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;
-    background:rgba(10,12,18,.92);backdrop-filter:blur(3px);padding:18px;}
-  #howto.hidden{display:none;}
-  #howtoCard{width:440px;max-width:92%;max-height:90%;overflow:auto;background:var(--panel);
-    border:1px solid #4a3a28;border-radius:12px;padding:20px 22px;box-shadow:0 12px 44px rgba(0,0,0,.55);}
-  #howtoCard h2{margin:0 0 4px;font-size:17px;color:#f0dcbb;letter-spacing:1px;}
-  #howtoCard .sub{font-size:12px;color:#b6a487;margin-bottom:14px;}
-  #howtoCard ol{margin:0;padding-left:20px;}
-  #howtoCard li{font-size:13px;line-height:1.9;color:#d8c8ac;margin:9px 0;}
-  #howtoCard li b{color:#f0dcbb;font-weight:600;}
-  #howtoCard .em{color:#e8c08a;font-style:normal;}
-  #howtoCard .row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
-
-  /* ---- 移动端适配 ---- */
-  @media (max-width:560px){
-    .btn{font-size:14px;padding:10px 16px;border-radius:16px;min-height:42px;}
-    .card{width:94%;max-width:94%;padding:18px 16px;}
-    #shelterCard{width:94%;}
-    #counterUI{bottom:14px;left:14px;gap:8px;}
-    #counterUI .btn{font-size:13px;padding:11px 14px;min-height:46px;}
-    #hud{font-size:13px;}
-    .spot{font-size:12px;padding:7px 12px;min-height:32px;}
-    #subtitle{font-size:15px;bottom:66px;max-width:92%;}
-    textarea{min-height:92px;font-size:15px;}
-    .diaryText{font-size:16px;}
-    .note{font-size:13.5px;}
-    #howtoCard{width:94%;padding:18px 16px;}
-  }
-  @media (pointer:coarse){
-    .btn{min-height:42px;}
-    .spot{min-height:34px;}
-    .navBtn{min-height:40px;padding:8px 14px;font-size:13px;}
-    .closeX{font-size:24px;padding:4px;}
-  }
 </style>
 </head>
 <body>
@@ -229,23 +186,21 @@ window.onerror=function(msg,src,line,col){
       <div class="w" id="hudTime">08:00</div>
       <div id="hudWeather">晴</div>
       <button id="btnMute" title="声音开关">♪</button>
-      <button id="btnLang" title="Language / 语言">EN</button>
-      <button id="btnHelp" data-i18n="help" title="怎么玩">怎么玩</button>
     </div>
     <div id="subtitle"></div>
     <div id="toast"></div>
     <div id="counterUI">
-      <button class="btn ghost hide" id="btnMake" data-i18n="make_drink">制作饮品</button>
-      <button class="btn ghost hide" id="btnDiary" data-i18n="diary">手账</button>
-      <button class="btn hide" id="btnCheck" data-i18n="checkout">结账</button>
+      <button class="btn ghost hide" id="btnMake">制作饮品</button>
+      <button class="btn ghost hide" id="btnDiary">手账</button>
+      <button class="btn hide" id="btnCheck">结账</button>
     </div>
-    <div id="shelterSpot" data-i18n="shelter_spot"><span class="sofa">🛋</span>Shelter 角落</div>
+    <div id="shelterSpot"><span class="sofa">🛋</span>Shelter 角落</div>
     <div id="opening">
       <div id="introStage">
         <canvas id="introCanvas" width="360" height="200"></canvas>
         <div id="introTitle"></div>
-        <div id="introBox"><span id="introText"></span><div id="introHint" data-i18n="intro_hint">点击继续 ▾</div></div>
-        <button id="openDoorBtn" data-i18n="open">开门</button>
+        <div id="introBox"><span id="introText"></span><div id="introHint">点击继续 ▾</div></div>
+        <button id="openDoorBtn">开门</button>
       </div>
       <div id="introFade"></div>
     </div>
@@ -261,11 +216,11 @@ window.onerror=function(msg,src,line,col){
         <span class="closeX" data-close="shelter">×</span>
         <!-- 阶段一：还没坐下，只能先坐下 -->
         <div id="shelterEnter">
-          <h2 data-i18n="shelter_h2">Shelter · 一个可以暂时不赶路的地方</h2>
-          <p class="small" data-i18n="shelter_p">靠窗的小角落。沙发、木桌、暖灯，还有一面可以贴便利贴的墙，和一个慢慢变丰富的书架。</p>
+          <h2>Shelter · 一个可以暂时不赶路的地方</h2>
+          <p class="small">靠窗的小角落。沙发、木桌、暖灯，还有一面可以贴便利贴的墙，和一个慢慢变丰富的书架。</p>
           <div class="row">
-            <button class="btn" id="sSit" data-i18n="sit_rest">坐下歇会儿</button>
-            <button class="btn ghost" id="sLeave" data-i18n="leave">离开</button>
+            <button class="btn" id="sSit">坐下歇会儿</button>
+            <button class="btn ghost" id="sLeave">离开</button>
           </div>
         </div>
         <!-- 阶段二：坐下之后，真正进入这个角落 -->
@@ -273,12 +228,12 @@ window.onerror=function(msg,src,line,col){
           <div id="sceneWrap">
             <canvas id="shelterCanvas" width="400" height="160"></canvas>
             <!-- 按键分别落在：书架上 / 便签墙上 / 桌子上 -->
-            <button class="spot" id="spotShelf" style="left:15%;top:53%" data-i18n="see_shelf">看书架</button>
-            <button class="spot" id="spotWall" style="left:44%;top:40%" data-i18n="note_wall">便签墙</button>
-            <button class="spot" id="spotNote" style="left:45.5%;top:75%" data-i18n="write_note">写便签</button>
+            <button class="spot" id="spotShelf" style="left:15%;top:53%">看书架</button>
+            <button class="spot" id="spotWall" style="left:44%;top:40%">便签墙</button>
+            <button class="spot" id="spotNote" style="left:45.5%;top:75%">写便签</button>
           </div>
           <div class="row">
-            <button class="btn ghost" id="sStand" data-i18n="stand_leave">起身离开</button>
+            <button class="btn ghost" id="sStand">起身离开</button>
           </div>
         </div>
       </div>
@@ -286,8 +241,8 @@ window.onerror=function(msg,src,line,col){
     <div id="shelfPanel" class="overlay hidden" style="z-index:22">
       <div class="card">
         <span class="closeX" data-close="shelfPanel">×</span>
-        <h2 data-i18n="shelf_h2">书架</h2>
-        <p class="small" data-i18n="shelf_p">慢慢翻。遇见一本就带走一本，或者只是记住它。</p>
+        <h2>书架</h2>
+        <p class="small">慢慢翻。遇见一本就带走一本，或者只是记住它。</p>
         <div id="shelfList"></div>
       </div>
     </div>
@@ -299,7 +254,7 @@ window.onerror=function(msg,src,line,col){
         <p id="bkIntro"></p>
         <p class="r" id="bkRec" style="color:#e8c08a"></p>
         <div class="qbox" id="bkQuoteBox" style="display:none">
-          <div class="qcap" data-i18n="bk_qcap">· 常被读到的几句 ·</div>
+          <div class="qcap">· 常被读到的几句 ·</div>
           <blockquote id="bkQuoteText"></blockquote>
           <div class="qnav">
             <button class="btn ghost tiny" id="bkQPrev">‹ 上一句</button>
@@ -308,22 +263,22 @@ window.onerror=function(msg,src,line,col){
           </div>
         </div>
         <div class="row">
-          <button class="btn" id="bkCollect" data-i18n="collect">收藏这本书</button>
-          <button class="btn ghost" id="bkBack" data-i18n="back">返回</button>
+          <button class="btn" id="bkCollect">收藏这本书</button>
+          <button class="btn ghost" id="bkBack">返回</button>
         </div>
       </div>
     </div>
     <div id="notes" class="overlay hidden">
       <div class="card">
         <span class="closeX" data-close="notes">×</span>
-        <h2 data-i18n="notes_h2">共享读书墙</h2>
-        <p class="small" data-i18n="notes_p">墙上慢慢出现一些便签，一部分来自这里的人，一部分来自你。刷新也不会消失。</p>
+        <h2>共享读书墙</h2>
+        <p class="small">墙上慢慢出现一些便签，一部分来自这里的人，一部分来自你。刷新也不会消失。</p>
         <div id="notesList"></div>
         <div class="row">
           <textarea id="noteInput" placeholder="写点什么吧——一句话、一句摘抄、一个很小的念头，都可以。"></textarea>
         </div>
         <div class="row">
-          <button class="btn" id="noteAdd" data-i18n="leave_note">留下便签</button>
+          <button class="btn" id="noteAdd">留下便签</button>
         </div>
       </div>
     </div>
@@ -337,14 +292,14 @@ window.onerror=function(msg,src,line,col){
           <div class="diaryText" id="diaryText"></div>
           <div class="flower">❀</div>
           <div class="row" style="margin-top:14px">
-            <button class="navBtn" id="dPrev" data-i18n="prev_day">← 前一天</button>
-            <button class="navBtn" id="dNext" data-i18n="next_day">后一天 →</button>
-            <button class="btn" id="dWrite" style="margin-left:auto" data-i18n="write_one">写一句</button>
-            <button class="btn ghost" id="dClose" data-i18n="close_diary">合上</button>
+            <button class="navBtn" id="dPrev">← 前一天</button>
+            <button class="navBtn" id="dNext">后一天 →</button>
+            <button class="btn" id="dWrite" style="margin-left:auto">写一句</button>
+            <button class="btn ghost" id="dClose">合上</button>
           </div>
           <div id="dEditor" style="display:none;margin-top:10px">
             <textarea id="dInput" placeholder="今天店长想写点什么……"></textarea>
-            <div class="row"><button class="btn" id="dSave" data-i18n="save_page">保存这一页</button></div>
+            <div class="row"><button class="btn" id="dSave">保存这一页</button></div>
           </div>
         </div>
       </div>
@@ -360,131 +315,6 @@ window.onerror=function(msg,src,line,col){
    等级 / 金币 / 复杂经营数值。玩家无需输入任何台词。
    ========================================================================= */
 const $ = id => document.getElementById(id);
-
-/* ========== 多语言（i18n） ========== */
-let LANG = (function(){ try{ return localStorage.getItem("tls_lang") || "zh"; }catch(e){ return "zh"; } })();
-let _bookCur = null, introCurT = null;
-const I18N = {
-  zh: {
-    open:"开门", sit_rest:"坐下歇会儿", leave:"离开", stand_leave:"起身离开",
-    see_shelf:"看书架", note_wall:"便签墙", write_note:"写便签", collect:"收藏这本书",
-    back:"返回", leave_note:"留下便签",     prev_day:"← 前一天", next_day:"后一天 →",
-    write_one:"写一句", close_diary:"合上", save_page:"保存这一页",
-    notes_empty:"墙还是空的。写下第一张吧。", you:"你", someone:"有人", diary_empty:"（这一页还是空白的。）",
-    make_drink:"制作饮品", checkout:"结账", diary:"手账", shelter_spot:"Shelter 角落",
-    help:"怎么玩", mute_on:"声音关", mute_off:"声音开", lang_btn:"中 / EN",
-    howto_title:"怎么玩", howto_sub:"一家很小的店，卖牛奶、面包、雨伞，也卖一会儿时间。",
-    howto_1:"<b>开门营业</b>：点开场的「开门」，或每天会自动开始。店里会陆续有人来。",
-    howto_2:"<b>招待客人</b>：有人到柜台时，点「结账」完成；想做饮品时点「制作饮品」选一杯。",
-    howto_3:"<b>学做新饮品</b>：客人不在的空档，点「制作饮品」里虚线框的可学饮品，空闲时就能学会。",
-    howto_4:"<b>Shelter 角落</b>：点左下角「Shelter 角落」坐下，看书架、翻便签墙、写一张便签。",
-    howto_5:"<b>手账</b>：点「手账」看今天的自动小记，也能自己写一句。",
-    howto_6:"<b>收店</b>：每天到 22:00 会自动打烊，进入下一天。声音和雨声会陪着你。",
-    howto_tip:"没有目标，也没有输赢。慢慢来，灯会一直开着。",
-    howto_close:"开始", howto_replay:"再看一遍",
-    make_title:"今天想做点什么", learn_title:"想学一道新饮品", learn_hint:"（先顾着客人，空闲时再学）",
-    learn_btn:"学一学", busy_tip:"客人还在等，先顾着眼前的事吧。",
-    studymsg:"客人还没来。这种空档正好可以学做一道新饮品——点「制作饮品」就能看到想学的。",
-    rain_wx:"雨", sun_wx:"晴", cloudy_wx:"阴", fog_wx:"雾",
-    weather_sunny:"晴", weather_rain:"雨", weather_cloudy:"阴", weather_fog:"雾",
-    seat_window:"在窗边坐了很久，才起身。", bo_early:"茂伯今天来的比平时早。",
-    you_late:"今晚阿宥来得很晚。", rain_collar:"雨落在玻璃上，%s收了收衣领。",
-    visitor_sit:"%s今天只是想进来坐一会儿。", npc_note_known:"%s把一张便签贴在了墙上。",
-    npc_note_unknown:"墙上又多了一张便签。", checkout_done:"好了，慢走——",
-    forgot_umbrella:"%s今天走得快，把伞忘在了门口。", door_rang:"门铃响了一声，%s已经到了街上。",
-    learn_done:"学会了 %s ☕", made_done:"好了 ☕", busy_learn:"现在有点忙，等客人走了再学",
-    making_hint:"做一杯 %s…", learning_hint:"学做一杯 %s…",
-    learntip_msg:"客人还没来。这种空档正好可以学做一道新饮品——点「制作饮品」就能看到想学的。",
-    learn_text:"你照着步骤试了一次，%s好像也没那么难了。",
-    return_msgs:["昨晚你把Shelter的灯留到了很晚。","今天的店里，应该会比昨天暖和一点。","风把门口的伞吹倒了，又自己站了回去。","昨天的便签还在墙上，你写的那张在最上面。"],
-    close_shop:["今晚收店时，窗外还有一点亮。明天大概会是个好天气吧。","今天没有什么特别的事情。这样也很好。","忘记买草莓了。明天一定记得。"],
-    lamp_msg:"灯关了。明天见。",
-    auto_diary_book:["今天有人把一本书放到了Shelter。我不知道他什么时候来的，但我很喜欢这种感觉。","Shelter的书架又多了一本。慢慢来，总会有人遇见它的。"],
-    auto_diary_note:["今天在墙上留了一张便签，也不知道谁会看到。","读着墙上的字，忽然觉得这家店有人在陪着我。"],
-    auto_diary_tail:["忘记买草莓了。明天一定记得。","今天的咖啡有一点点苦，不过我好像也没有那么讨厌。","明天如果天气好，就把门开大一点。","店里的灯今天比平时亮了一点。看起来还不错。","晚上收店的时候，发现窗外还有一点亮。明天大概会是个好天气吧。"],
-    diary_base_sunny:["今天把门开早了一点。街上还没有什么人，不过阳光先来了。","今天的光很亮，连货架的影子都清楚。","下午的太阳斜进来，把柜台照得暖暖的。"],
-    diary_base_rain:["下午一直下雨，我没有特别想做什么，只想把灯开着。","雨水在玻璃上划出细线，像谁写了一半又擦掉的字。","今天的雨不大，但足够把声音都泡软了。"],
-    diary_base_cloudy:["今天的天是灰的，店里反而显得更暖。","没什么特别的天气，也没什么特别的事。这样也很好。","风从巷口穿过来，带着远处火锅的味道。"],
-    diary_base_fog:["雾把街道都收起来了，店里像一座小岛。","今天看不清远处，反而觉得安静。","雾里什么都慢，连门铃都像隔了一层。"],
-    diary_default:"今天平淡得像一杯温水。",
-    note_placeholder:"写点什么吧——一句话、一句摘抄、一个很小的念头，都可以。",
-    diary_placeholder:"今天店长想写点什么……", diary_caption:"今日小记",
-    book_collect_tip:"已经收进书架了。", intro_hint:"点击继续 ▾", shelter_h2:"Shelter · 一个可以暂时不赶路的地方", shelter_p:"靠窗的小角落。沙发、木桌、暖灯，还有一面可以贴便利贴的墙，和一个慢慢变丰富的书架。", bk_qcap:"· 常被读到的几句 ·", notes_h2:"共享读书墙", notes_p:"墙上慢慢出现一些便签，一部分来自这里的人，一部分来自你。刷新也不会消失。", shelf_h2:"书架", shelf_p:"慢慢翻。遇见一本就带走一本，或者只是记住它。", book_lang:"语言", book_origin:"原文"
-  },
-  en: {
-    open:"Open", sit_rest:"Sit a while", leave:"Leave", stand_leave:"Get up & leave",
-    see_shelf:"Read shelf", note_wall:"Note wall", write_note:"Write a note", collect:"Keep this book",
-    back:"Back", leave_note:"Leave a note",     prev_day:"← Prev day", next_day:"Next day →",
-    write_one:"Write one", close_diary:"Close", save_page:"Save page",
-    notes_empty:"The wall is still empty. Leave the first note.", you:"you", someone:"someone", diary_empty:"(This page is still blank.)",
-    make_drink:"Make a drink", checkout:"Checkout", diary:"Journal", shelter_spot:"Shelter Corner",
-    help:"How to play", mute_on:"Sound off", mute_off:"Sound on", lang_btn:"中 / EN",
-    howto_title:"How to play", howto_sub:"A tiny store that sells milk, bread, umbrellas — and a little bit of time.",
-    howto_1:"<b>Open up</b>: tap “Open” at the intro, or the day starts on its own. People drift in.",
-    howto_2:"<b>Take care of guests</b>: when someone reaches the counter, tap “Checkout”. To make a drink, tap “Make a drink” and pick one.",
-    howto_3:"<b>Learn a drink</b>: in quiet gaps with no guests, tap a dashed “learn” drink in “Make a drink” to pick it up.",
-    howto_4:"<b>Shelter Corner</b>: tap “Shelter Corner” (bottom-left) to sit, browse the shelf, flip the note wall, or leave a note.",
-    howto_5:"<b>Journal</b>: tap “Journal” to read today’s auto note, or write one yourself.",
-    howto_6:"<b>Close</b>: at 22:00 the shop closes on its own and a new day begins. Sound and rain stay with you.",
-    howto_tip:"No goals, no winning or losing. Take your time — the lamp stays on.",
-    howto_close:"Start", howto_replay:"Watch again",
-    make_title:"What shall we make today", learn_title:"Learn a new drink", learn_hint:"(guests first; learn when free)",
-    learn_btn:"Learn it", busy_tip:"Guests are waiting — tend to them first.",
-    studymsg:"No one yet. A quiet gap is a good time to learn a drink — tap “Make a drink” to see what’s learnable.",
-    rain_wx:"Rain", sun_wx:"Sun", cloudy_wx:"Cloudy", fog_wx:"Fog",
-    weather_sunny:"Sunny", weather_rain:"Rain", weather_cloudy:"Cloudy", weather_fog:"Fog",
-    seat_window:"sat by the window for a long while before leaving.", bo_early:"Uncle Bo came earlier than usual today.",
-    you_late:"You came very late tonight.", rain_collar:"Rain on the glass — %s pulled their collar in.",
-    visitor_sit:"%s just wants to sit in for a while today.", npc_note_known:"%s pinned a note to the wall.",
-    npc_note_unknown:"Another note appeared on the wall.", checkout_done:"All set — take care.",
-    forgot_umbrella:"%s left in a hurry and forgot the umbrella by the door.", door_rang:"The bell rang once; %s was already on the street.",
-    learn_done:"Learned %s ☕", made_done:"Done ☕", busy_learn:"A bit busy now — learn after guests leave",
-    making_hint:"Making a cup of %s…", learning_hint:"Learning to make %s…",
-    learntip_msg:"No guests yet. A quiet gap is a good time to learn a new drink — tap “Make a drink” to see what you can learn.",
-    learn_text:"You tried it once, step by step; %s doesn’t seem so hard after all.",
-    return_msgs:["Last night you left the Shelter lamp on late.","The shop should feel a little warmer than yesterday.","The wind knocked the umbrella over, then it stood back up.","Yesterday’s notes are still on the wall — yours is on top."],
-    close_shop:["Closing up, there was still a little light outside. Maybe tomorrow’s weather will be kind.","Nothing special today. That’s fine too.","Forgot the strawberries again. Must remember tomorrow."],
-    lamp_msg:"The lamp is off. See you tomorrow.",
-    auto_diary_book:["Someone left a book in the Shelter today. I don’t know when they came, but I love that feeling.","The Shelter shelf has another book. Take your time; someone will find it."],
-    auto_diary_note:["I left a note on the wall today — who will see it, I wonder.","Reading the words on the wall, I felt the shop keeping me company."],
-    auto_diary_tail:["Forgot the strawberries again. Must remember tomorrow.","Today’s coffee was a little bitter, but I didn’t hate it.","If it’s nice tomorrow, open the door wider.","The lamp was a bit brighter today. Looks alright.","At closing, there was still a little light outside. Maybe tomorrow’s kind."],
-    diary_base_sunny:["Opened a little earlier today. The street was empty, but the sunlight came first.","The light was so bright the shadows on the shelves were sharp.","Afternoon sun slanted in and warmed the counter."],
-    diary_base_rain:["It rained all afternoon; I didn’t want to do much, just leave the lamp on.","Rain drew thin lines on the glass, like half-written words erased.","Not a heavy rain, but enough to soften every sound."],
-    diary_base_cloudy:["The sky was grey; the shop felt warmer for it.","No special weather, no special day. That’s fine too.","Wind came down the alley, carrying a distant hotpot smell."],
-    diary_base_fog:["The fog gathered the streets away; the shop was like a small island.","Couldn’t see far today, and felt quieter for it.","Everything slows in the fog, even the doorbell sounds distant."],
-    diary_default:"A plain day, like a cup of warm water.",
-    note_placeholder:"Write something — a sentence, a quote, a tiny thought. Anything goes.",
-    diary_placeholder:"Something the keeper wants to note today…", diary_caption:"Today’s note",
-    book_collect_tip:"Already on your shelf.", intro_hint:"Tap to continue ▾", shelter_h2:"Shelter · a place to pause, just for a while", shelter_p:"A small corner by the window. A sofa, a wooden table, a warm lamp, a wall for sticky notes, and a shelf that slowly fills.", bk_qcap:"· lines often returned to ·", notes_h2:"Shared reading wall", notes_p:"Notes appear on the wall — some from the people here, some from you. They stay even after refresh.", shelf_h2:"Bookshelf", shelf_p:"Browse slowly. Take one home, or just remember it.", book_lang:"Language", book_origin:"Original"
-  }
-};
-function t(key){
-  let s = (LANG==="en" && I18N.en[key]!=null) ? I18N.en[key] : I18N.zh[key];
-  if(s==null) s = key;
-  return s;
-}
-function setLang(l){
-  LANG=l;
-  try{ localStorage.setItem("tls_lang", l); }catch(e){}
-  document.documentElement.lang = (l==="en")?"en":"zh";
-  applyLang();
-}
-function applyLang(){
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    const k=el.getAttribute("data-i18n");
-    const html = I18N[LANG][k]!=null ? I18N[LANG][k] : I18N.zh[k];
-    if(html!=null) el.innerHTML=html;
-  });
-  const bl=$("btnLang"); if(bl) bl.textContent = (LANG==="zh") ? "EN" : "中文";
-  const bh=$("btnHelp"); if(bh) bh.title = (LANG==="zh") ? "怎么玩" : "How to play";
-  if(!$("makeMenu").classList.contains("hidden")) openMakeMenu();
-  if(!$("diary").classList.contains("hidden")) renderDiary();
-  if(!$("notes").classList.contains("hidden")) renderNotes();
-  if(!$("bookModal").classList.contains("hidden") && _bookCur) openBookModal(_bookCur);
-  const wxKey={晴:"sunny",小雨:"rain",阴:"cloudy",雾:"fog"}[S.weather]||"sunny";
-  $("hudWeather").textContent = S.weather.includes("雨") ? t("weather_rain") : t("weather_"+wxKey);
-  if(introActive && introCurT && !introDoorShown) showIntroText(introCurT);
-}
 const stage = $("stage"), cv = $("store"), ctx = cv.getContext("2d");
 const W = 480, H = 270;
 const lerp = (a,b,t)=>a+(b-a)*t;
@@ -657,8 +487,8 @@ function doCheckout(){
   const c=q[0];
   sfx("checkout");
   c.state="leaving"; c.tx=452; c.ty=206;
-  toast(t("checkout_done"));
-  if(Math.random()<0.18) narrate(pick([ t("forgot_umbrella").replace("%s",c.ch.name), t("door_rang").replace("%s",c.ch.name) ]));
+  toast("好了，慢走——");
+  if(Math.random()<0.18) narrate(pick([ c.ch.name+"今天走得快，把伞忘在了门口。", "门铃响了一声，"+c.ch.name+"已经到了街上。" ]));
   if(c.ch.bookChance && Math.random()<c.ch.bookChance && !c.bookDrop){
     c.bookDrop=true; setTimeout(()=>dropNpcBook(c.ch), 1500);
   }
@@ -672,7 +502,7 @@ function startMake(drink, cust, learn){
   if(making) return;
   making={drink, start:performance.now(), dur: learn?LEARN_DUR:MAKE_DUR, learn:!!learn, cust};
   $("making").classList.remove("hidden");
-  $("makeHint").textContent = learn ? t("learning_hint").replace("%s",drink) : t("making_hint").replace("%s",drink);
+  $("makeHint").textContent = learn ? ("学做一杯 "+drink+"…") : ("做一杯 "+drink+"…");
   sfx("pour");
 }
 function finishMake(){
@@ -680,12 +510,12 @@ function finishMake(){
   $("making").classList.add("hidden");
   if(m.learn){
     if(!S.unlocked.includes(m.drink)){ S.unlocked.push(m.drink); save(); }
-    toast(t("learn_done").replace("%s",m.drink));
+    toast("学会了 "+m.drink+" ☕");
     sfx("cup");
-    narrate(t("learn_text").replace("%s",m.drink));
+    narrate("你照着步骤试了一次，"+m.drink+"好像也没那么难了。");
   } else {
     if(m.cust && !m.cust.left){ m.cust.made=true; }
-    toast(t("made_done"));
+    toast("好了 ☕");
     sfx("cup");
   }
 }
@@ -699,21 +529,21 @@ function freeNow(){
 }
 function startLearn(d){
   if(making) return;
-  if(!freeNow()){ toast(t("busy_learn")); return; }
+  if(!freeNow()){ toast("现在有点忙，等客人走了再学"); return; }
   if(S.unlocked.includes(d)) return;
   startMake(d, null, true);
 }
 function openMakeMenu(){
-  let html='<span class="closeX" data-close="makeMenu">×</span><h2>'+t("make_title")+'</h2>';
+  let html='<span class="closeX" data-close="makeMenu">×</span><h2>今天想做点什么</h2>';
   S.unlocked.forEach(d=>{ html+='<div class="book" data-d="'+d+'"><div class="t">'+(DRINK_EMOJI[d]||"")+' '+d+'</div></div>'; });
   const locked = ALL_DRINKS.filter(d=>!S.unlocked.includes(d));
   if(locked.length){
     const free = freeNow();
-    html+='<div class="mc-div"></div><h3 class="mc-sub">'+t("learn_title")+(free?'':t("learn_hint"))+'</h3>';
+    html+='<div class="mc-div"></div><h3 class="mc-sub">想学一道新饮品'+(free?'':'（先顾着客人，空闲时再学）')+'</h3>';
     if(free){
-      locked.forEach(d=>{ html+='<div class="book learn" data-learn="'+d+'"><div class="t">＋ '+(DRINK_EMOJI[d]||"")+' '+d+'</div><div class="a">'+t("learn_btn")+'</div></div>'; });
+      locked.forEach(d=>{ html+='<div class="book learn" data-learn="'+d+'"><div class="t">＋ '+(DRINK_EMOJI[d]||"")+' '+d+'</div><div class="a">学一学</div></div>'; });
     } else {
-      html+='<p class="small">'+t("busy_tip")+'</p>';
+      html+='<p class="small">客人还在等，先顾着眼前的事吧。</p>';
     }
   }
   const mm=$("makeMenuCard"); mm.innerHTML=html;
@@ -791,52 +621,50 @@ function toast(msg){
   toastTimer=setTimeout(()=>{ if(el) el.classList.remove("show"); }, 1800);
 }
 function maybeNarrationSpawn(ch,c){
-  if(c.isVisitor && Math.random()<0.4) narrate(t("visitor_sit").replace("%s",ch.name));
-  if(S.weather.includes("雨") && Math.random()<0.3) narrate(t("rain_collar").replace("%s",ch.name));
+  if(c.isVisitor && Math.random()<0.4) narrate(ch.name+"今天只是想进来坐一会儿。");
+  if(S.weather.includes("雨") && Math.random()<0.3) narrate("雨落在玻璃上，"+ch.name+"收了收衣领。");
 }
 function maybeNarrationLeave(c){
-  if(c.sit==="window" && Math.random()<0.3) narrate(c.ch.name + t("seat_window"));
-  if(c.ch.id==="bo" && Math.random()<0.2) narrate(t("bo_early"));
-  if(c.ch.id==="you" && Math.random()<0.3) narrate(t("you_late"));
+  if(c.sit==="window" && Math.random()<0.3) narrate(c.ch.name+"在窗边坐了很久，才起身。");
+  if(c.ch.id==="bo" && Math.random()<0.2) narrate("茂伯今天来的比平时早。");
+  if(c.ch.id==="you" && Math.random()<0.3) narrate("今晚阿宥来得很晚。");
 }
 const NPC_NOTES = [
-  {zh:"今天的云很好看。",en:"The clouds were lovely today."},
-  {zh:"明天记得带伞。",en:"Remember an umbrella tomorrow."},
-  {zh:"这本书看完了。",en:"Finished this book."},
-  {zh:"今天也没有迟到。",en:"Didn’t arrive late today either."},
-  {zh:"有人需要的时候，灯就不要关得太早。",en:"When someone needs it, don’t switch the lamp off too soon."},
-  {zh:"窗台上的那盆花，好像长高了一点。",en:"The plant on the sill seems a little taller."},
-  {zh:"门口的风铃，今天响得格外轻。",en:"The wind chime by the door rang especially softly today."},
-  {zh:"雾里什么都慢，连门铃都像隔了一层。",en:"Everything slows in the fog, even the doorbell sounds distant."}
+  "今天的云很好看。","明天记得带伞。","这本书看完了。","今天也没有迟到。",
+  "有人需要的时候，灯就不要关得太早。","窗台上的那盆花，好像长高了一点。",
+  "门口的风铃，今天响得格外轻。","雾里什么都慢，连门铃都像隔了一层。"
 ];
 function dropNpcBook(ch){
   const known = Math.random()<0.6;
-  const n = pick(NPC_NOTES);
-  S.notes.npc.push({text:n[LANG], who: known? ch.name : (LANG==="zh"?"有人":"Someone"), ts:Date.now()});
+  S.notes.npc.push({text:pick(NPC_NOTES), who: known? ch.name : "有人", ts:Date.now()});
   save();
-  narrate(known ? t("npc_note_known").replace("%s", ch.name) : t("npc_note_unknown"));
+  narrate(known? ch.name+"把一张便签贴在了墙上。" : "墙上又多了一张便签。");
 }
 
 /* ---------- 手账（生活小记） ---------- */
 function diaryKey(){ return "d"+S.day; }
 function genDiary(reason){
   if(S.diary[diaryKey()]) return;
-  const W = I18N[LANG];
   const wx=S.weather;
-  const baseMap={晴:W.diary_base_sunny,小雨:W.diary_base_rain,阴:W.diary_base_cloudy,雾:W.diary_base_fog};
-  let arr = baseMap[wx] || [W.diary_default];
-  let text = pick(arr);
-  if(reason==="book") text = pick(W.auto_diary_book);
-  if(reason==="note") text = pick(W.auto_diary_note);
-  if(Math.random()<0.4) text += "\n" + pick(W.auto_diary_tail);
-  S.diary[diaryKey()] = {date:new Date().toLocaleDateString(LANG==="en"?"en-US":"zh-CN"), weather:wx, text, auto:!reason, ts:Date.now()};
+  const base = {
+    "晴":["今天把门开早了一点。街上还没有什么人，不过阳光先来了。","今天的光很亮，连货架的影子都清楚。","下午的太阳斜进来，把柜台照得暖暖的。"],
+    "小雨":["下午一直下雨，我没有特别想做什么，只想把灯开着。","雨水在玻璃上划出细线，像谁写了一半又擦掉的字。","今天的雨不大，但足够把声音都泡软了。"],
+    "阴":["今天的天是灰的，店里反而显得更暖。","没什么特别的天气，也没什么特别的事。这样也很好。","风从巷口穿过来，带着远处火锅的味道。"],
+    "雾":["雾把街道都收起来了，店里像一座小岛。","今天看不清远处，反而觉得安静。","雾里什么都慢，连门铃都像隔了一层。"]
+  }[wx] || ["今天平淡得像一杯温水。"];
+  let text = pick(base);
+  if(reason==="book") text = pick(["今天有人把一本书放到了Shelter。我不知道他什么时候来的，但我很喜欢这种感觉。","Shelter的书架又多了一本。慢慢来，总会有人遇见它的。"]);
+  if(reason==="note") text = pick(["今天在墙上留了一张便签，也不知道谁会看到。","读着墙上的字，忽然觉得这家店有人在陪着我。"]);
+  if(Math.random()<0.4) text += "\n" + pick([
+    "忘记买草莓了。明天一定记得。","今天的咖啡有一点点苦，不过我好像也没有那么讨厌。","明天如果天气好，就把门开大一点。","店里的灯今天比平时亮了一点。看起来还不错。","晚上收店的时候，发现窗外还有一点亮。明天大概会是个好天气吧。"
+  ]);
+  S.diary[diaryKey()] = {date:new Date().toLocaleDateString("zh-CN"), weather:wx, text, auto:!reason, ts:Date.now()};
   save();
 }
 
 /* ---------- 共享读书墙 / 书 ---------- */
 const BOOKS = [
   {id:"walden",t:"瓦尔登湖",a:"[美] 亨利·戴维·梭罗",i:"一个人搬到湖边，自己盖了间小木屋，想看看生活最少需要什么。",r:"适合一个人坐很久的时候。",
-   en:{t:"Walden",a:"Henry David Thoreau",i:"A man moves to a lake, builds himself a small cabin, and wants to see just how little life truly requires.",r:"Good for when you sit alone for a long while."},
    q:['我愿意深深地扎入生活，吮尽生活的骨髓，过得扎实，简单，把一切不属于生活的内容剔除得干净利落，把生活逼到绝处，用最基本的形式，简单，简单，再简单。',
       '我步入丛林，因为我希望生活得有意义：我希望活得深刻，并汲取生命中所有的精华。然后从中学习，以免让我在生命终结时，却发现自己从来没有活过。',
       '时间只是我垂钓的溪流。我喝溪水，喝水时我看到它那沙底，它多么浅啊。它那浅浅的流水逝去了，可是永恒留了下来。',
@@ -846,14 +674,12 @@ const BOOKS = [
       '知道自己知道什么，也知道自己不知道什么，这就是真正的知识。',
       '不必给我爱，不必给我钱，不必给我名誉，给我真理吧。']},
   {id:"republic",t:"理想国",a:"[古希腊] 柏拉图",i:"用一场长长的对话，试着把“什么是好的生活”问到底。",r:"适合忽然想追问点什么的深夜。",
-   en:{t:"The Republic",a:"Plato",i:"A long dialogue that keeps asking, to the very bottom, what a good life really is.",r:"Good for a late night when you suddenly want to ask something."},
    q:['让我们想象一个洞穴式的地下室，它有一条长长的通道通向外面，可让和洞穴一样宽的一路亮光照进来。有一些人从小就住在这洞穴里，头颈和腿脚都绑着，不能走动也不能转头，只能向前看着洞穴后壁。',
       '在他们背后远处高些的地方有东西燃烧着发出火光。在火光和这些被囚禁者之间，在洞外上面有一条路。沿着路边已筑有一带矮墙。矮墙的作用像傀儡戏演员在自己和观众之间设的一道屏障，他们把木偶举到屏障上头去表演。',
       '有一些人拿着各种器物举过墙头，从墙后面走过，有的还举着用木料、石料或其他材料制作的假人和假兽。而这些过路人，你可以料到有的在说话，有的不在说话。',
       '这些囚徒除了火光投射到他们对面洞壁上的阴影而外，他们还能看到自己的或同伴们的什么呢？',
       '如果囚徒们能够彼此交谈，你不认为，他们会断定这些影子是真实的事物吗？']},
   {id:"petit",t:"小王子",a:"[法] 安托万·德·圣埃克苏佩里",i:"一个从很小星球来的孩子，遇见了大人世界里许多奇怪的事。",r:"适合想起来某个很小的大人。",
-   en:{t:"The Little Prince",a:"Antoine de Saint-Exupéry",i:"A child from a very small planet meets many strange things in the world of grown-ups.",r:"Good when you think of a certain small grown-up."},
    q:['所有大人都曾经是小孩，但是很少有人记得。',
       '大人们热爱数字。当你跟他们说你认识了新朋友，他们从来不会问你重要的事情。',
       '一个人非常悲伤的时候，就会喜欢看日落。有一天，我看了四十四次日落。',
@@ -865,7 +691,6 @@ const BOOKS = [
       '仪式感就是使某一天与其他日子不同，使某一时刻与其他时刻不同。',
       '星星发亮是为了让每一个人有一天都能找到属于自己的星星。']},
   {id:"conv",t:"不便的便利店",a:"[韩] 金浩然",i:"一家深夜便利店，和一位总在夜里来、渐渐被点亮起来的大叔。",r:"适合深夜回到店里的时候。",
-   en:{t:"Convenience Store",a:"Kim Ho-il",i:"A late-night convenience store, and a man who keeps coming at night and is slowly lit up from within.",r:"Good for when you return to the shop late at night."},
    q:['人哪，就该尝一尝不方便的滋味。',
       '“有说戴口罩不方便的，也有说因为疫情这个那个不方便的，还有说自己想怎样就怎样的，可是这个社会本来就是这样啊，生活本来就是不方便的。”“好像是……这样的。”',
       '“就是说啊在便利店里和客人接触一来二去好像就跟大家熟络了起来。就算刚开始只是假装亲近，可慢慢地，好像也就真的亲近起来了。”',
@@ -877,7 +702,6 @@ const BOOKS = [
       '“这是……玉米须茶，心情不好的时候……最适合喝它了。”',
       '归根结底，生活就是一种关系，而关系就在于沟通。现在我才明白，原来幸福并不遥远，它就在和身边人分享心声的过程当中。']},
   {id:"birds",t:"飞鸟集",a:"[印] 拉宾德拉纳特·泰戈尔",i:"一百余首小诗，像飞鸟一样短，却留在心上很久。",r:"适合想抬头看一会儿天的时候。",
-   en:{t:"Stray Birds",a:"Rabindranath Tagore",i:"Over a hundred little poems, short as birds in flight, yet they stay with you a long while.",r:"Good when you want to look up at the sky for a bit."},
    q:['夏天的飞鸟，飞到我的窗前唱歌，又飞去了。秋天的黄叶，它们没有什么可唱，只叹息一声，飞落在那里。',
       '世界对着它的爱人，把它浩翰的面具揭下了。它变小了，小如一首歌，小如一回永恒的接吻。',
       '如果你因失去了太阳而流泪，那么你也将失去群星了。',
@@ -887,7 +711,6 @@ const BOOKS = [
       '使生如夏花之绚烂，死如秋叶之静美。',
       '我们的生命是度过大海，我们到了死时，便到了岸，各往各的世界去了。']},
   {id:"meditations",t:"沉思录",a:"[古罗马] 马可·奥勒留",i:"一位罗马皇帝写给自己的私人笔记，关于怎样好好活着。",r:"适合心里有点乱、需要安静下来的时候。",
-   en:{t:"Meditations",a:"Marcus Aurelius",i:"Private notes a Roman emperor wrote to himself, on how to live well.",r:"Good when your mind is a little restless and needs to settle."},
    q:['以一种欢乐的心情等待死亡，把死亡看做不是别的，只是组成一切生物的元素的分解。死是合乎本性的，而合乎本性的东西都不是恶。',
       '如果你因为什么外在的事物而感到痛苦，打扰你的不是这一事物，而是你自己对它的判断。而现在清除这一判断是在你的力量范围之内。',
       '当你不把你的思想指向公共福利的某个目标时，不要把你剩下的生命浪费在思考别人上。因为，当你有这种思想时，你就丧失了做别的事情的机会。',
@@ -897,7 +720,6 @@ const BOOKS = [
       '永远记住：你的心灵是不可征服的。',
       '唯一能从一个人那里夺走的只是现在。如果这是真的，即一个人只拥有现在，那么一个人就不可能丧失一件他并不拥有的东西。']},
   {id:"zhuangzi",t:"庄子",a:"庄周",i:"战国时的人，讲鱼、鹏、江湖、蝴蝶，也讲人怎么活得更自在。",r:"适合想不通、想放下的晚上。",
-   en:{t:"Zhuangzi",a:"Zhuang Zhou",i:"A man of the Warring States who spoke of fish, the great peng bird, rivers and lakes, and butterflies — and of how to live more freely.",r:"Good for an evening when you can't work it out and want to let go."},
    q:['北冥有鱼，其名为鲲，鲲之大，不知其几千里也。化而为鸟，其名为鹏，鹏之背，不知其几千里也。',
       '吾生也有涯，而知也无涯。以有涯随无涯，殆已。',
       '泉涸，鱼相与处于陆，相呴以湿，相濡以沫，不如相忘于江湖。',
@@ -907,7 +729,6 @@ const BOOKS = [
       '吾以天地为棺椁，以日月为连璧，星辰为珠玑，万物为赍送。吾葬具岂不备邪？何以加此！',
       '忘足，履之适也；忘要，带之适也；知忘是非，心之适也。']},
   {id:"tsurezure",t:"徒然草",a:"[日] 吉田兼好",i:"日本古代的随笔，像一个人在灯下断断续续写下对世事的看法。",r:"适合睡前随手翻一两段。",
-   en:{t:"Tsurezuregusa",a:"Yoshida Kenkō",i:"Essays from ancient Japan, like someone writing down, by lamplight, their scattered thoughts on the world.",r:"Good for flipping through a page or two before sleep."},
    q:['人心是不待风吹而自落的花。',
       '人如果立身简素，不慕豪奢，不敛财货，不贪图功名利禄，则可谓人中之上品也。',
       '飞鸟川的渊渚变化不定，人世的无常，也同样如此。',
@@ -918,23 +739,19 @@ const BOOKS = [
 ];
 
 function openBookModal(b){
-  _bookCur = b;
-  const e = (LANG==="en" && b.en) ? b.en : null;
-  $("bkTitle").textContent = e ? e.t : b.t;
-  $("bkAuthor").textContent = (e ? "by "+e.a : "文 / "+b.a);
-  $("bkIntro").textContent = e ? e.i : b.i;
-  $("bkRec").textContent = "· " + (e ? e.r : b.r);
+  $("bkTitle").textContent=b.t; $("bkAuthor").textContent="文 / "+b.a;
+  $("bkIntro").textContent=b.i; $("bkRec").textContent="· "+b.r;
   const collected=S.books.includes(b.id);
   $("bkCollect").textContent=collected?"已在书架 · 取消收藏":"收藏这本书";
   $("bkCollect").className=collected?"btn ghost":"btn";
   $("bkCollect").onclick=()=>{ if(S.books.includes(b.id)) S.books=S.books.filter(x=>x!==b.id); else S.books.push(b.id); save(); openBookModal(b); };
   $("bkBack").onclick=()=>$("bookModal").classList.add("hidden");
-  // 常被读到的几句 · 翻阅（原文，附语言标签）
+  // 常被读到的几句 · 翻阅
   const q=b.q||[]; const qbox=$("bkQuoteBox");
   if(q.length){
     qbox.style.display="";
     let qi=0;
-    const renderQ=()=>{ $("bkQuoteText").textContent=q[qi]; $("bkQIdx").textContent=(qi+1)+" / "+q.length+"  ·  "+t("book_origin"); };
+    const renderQ=()=>{ $("bkQuoteText").textContent=q[qi]; $("bkQIdx").textContent=(qi+1)+" / "+q.length; };
     renderQ();
     $("bkQPrev").onclick=()=>{ qi=(qi-1+q.length)%q.length; renderQ(); sfx("page"); };
     $("bkQNext").onclick=()=>{ qi=(qi+1)%q.length; renderQ(); sfx("page"); };
@@ -1257,10 +1074,9 @@ function drawShelter(){
 function renderNotes(){
   let h="";
   const all=[...S.notes.npc.map(n=>({...n,me:false})), ...S.notes.player.map(n=>({...n,me:true}))];
-  if(!all.length) h='<p class="small">'+t("notes_empty")+'</p>';
-  all.forEach((n,i)=>{ h+='<div class="note">'+escapeHtml(n.text)+(n.me?'<span class="del" data-i="'+i+'">×</span>':'')+'<span class="who">— '+(n.who||(n.me?t("you"):t("someone")))+'</span></div>'; });
+  if(!all.length) h='<p class="small">墙还是空的。写下第一张吧。</p>';
+  all.forEach((n,i)=>{ h+='<div class="note">'+escapeHtml(n.text)+(n.me?'<span class="del" data-i="'+i+'">×</span>':'')+'<span class="who">— '+(n.who||(n.me?'你':'有人'))+'</span></div>'; });
   $("notesList").innerHTML=h;
-  $("noteInput").placeholder=t("note_placeholder");
   $("notesList").querySelectorAll(".del").forEach(d=>d.onclick=()=>{ const i=+d.dataset.i; const pIndex = i - S.notes.npc.length; if(pIndex>=0&&pIndex<S.notes.player.length){ S.notes.player.splice(pIndex,1); save(); renderNotes(); } });
 }
 $("noteAdd").onclick=()=>{ const v=$("noteInput").value.trim(); if(!v) return; S.notes.player.push({text:v, who:"你", ts:Date.now()}); $("noteInput").value=""; save(); renderNotes(); sfx("cup"); };
@@ -1271,15 +1087,14 @@ let diaryViewDay=null;
 function openDiary(){ diaryViewDay=S.day; renderDiary(); $("diary").classList.remove("hidden"); sfx("page"); }
 function renderDiary(){
   const key="d"+diaryViewDay; const d=S.diary[key];
-  const dateStr = d ? d.date : (LANG==="en" ? new Date().toLocaleDateString("en-CA") : new Date().toLocaleDateString("zh-CN"));
-  $("diaryDate").textContent = (LANG==="en" ? "Day "+diaryViewDay : "第 "+diaryViewDay+" 天")+" · "+dateStr;
+  $("diaryDate").textContent = "第 "+diaryViewDay+" 天 · "+(d?d.date:new Date().toLocaleDateString("zh-CN"));
   drawWeatherIcon($("weatherIcon"), S.weather);
   if(d){ $("diaryText").textContent=d.text; $("dEditor").style.display="none"; }
-  else { $("diaryText").textContent = t("diary_empty"); }
+  else { $("diaryText").textContent="（这一页还是空白的。）"; }
   $("dPrev").onclick=()=>{ if(diaryViewDay>1){ diaryViewDay--; renderDiary(); } };
   $("dNext").onclick=()=>{ if(diaryViewDay<S.day){ diaryViewDay++; renderDiary(); } };
-  $("dWrite").onclick=()=>{ $("dEditor").style.display="block"; $("dInput").value=(d&&!d.auto)?d.text:""; $("dInput").placeholder=t("diary_placeholder"); setTimeout(()=>$("dInput").focus(),50); };
-  $("dSave").onclick=()=>{ const v=$("dInput").value.trim(); if(!v) return; S.diary["d"+diaryViewDay]={date: dateStr, weather:S.weather, text:v, auto:false, ts:Date.now()}; save(); renderDiary(); sfx("cup"); };
+  $("dWrite").onclick=()=>{ $("dEditor").style.display="block"; $("dInput").value=(d&&!d.auto)?d.text:""; setTimeout(()=>$("dInput").focus(),50); };
+  $("dSave").onclick=()=>{ const v=$("dInput").value.trim(); if(!v) return; S.diary["d"+diaryViewDay]={date:new Date().toLocaleDateString("zh-CN"), weather:S.weather, text:v, auto:false, ts:Date.now()}; save(); renderDiary(); sfx("cup"); };
   $("dClose").onclick=()=>$("diary").classList.add("hidden");
 }
 function drawWeatherIcon(c, wx){
@@ -1294,43 +1109,43 @@ function drawWeatherIcon(c, wx){
 /* ---------- 开场旁白（开门之前保留） ---------- */
 const introScript = [
   {dir:'black'},
-  {t:{zh:'雨声，很轻。',en:'Light rain.'}},
+  {t:'雨声，很轻。'},
   {dir:'fadein'},
   {dir:'lamp'},
-  {t:{zh:'一盏灯，亮起来。',en:'A lamp, switching on.'}},
-  {t:{zh:'城市很大。',en:'The city is vast.'}},
-  {t:{zh:'大到有些人走了很久，',en:'So vast that some walk a long while,'}},
-  {t:{zh:'也没有找到一个愿意听他说话的地方。',en:'and still find no place that cares to listen.'}},
-  {t:{zh:'一条街。',en:'A street.'}},
-  {t:{zh:'街角，一家便利店。',en:'At its corner, a convenience store.'}},
-  {t:{zh:'门口，放着一把坏了一半的伞。',en:'By the door, a half-broken umbrella.'}},
-  {t:{zh:'这里有一家很小的店。',en:'Here is a very small shop.'}},
-  {t:{zh:'卖牛奶、面包、雨伞，',en:'It sells milk, bread, umbrellas,'}},
-  {t:{zh:'也卖一些人并不急着买的东西。',en:'and the things people aren’t in a hurry to buy.'}},
-  {t:{zh:'比如——',en:'Like —'}},
-  {t:{zh:'一会儿时间。',en:'a little while.'}},
+  {t:'一盏灯，亮起来。'},
+  {t:'城市很大。'},
+  {t:'大到有些人走了很久，'},
+  {t:'也没有找到一个愿意听他说话的地方。'},
+  {t:'一条街。'},
+  {t:'街角，一家便利店。'},
+  {t:'门口，放着一把坏了一半的伞。'},
+  {t:'这里有一家很小的店。'},
+  {t:'卖牛奶、面包、雨伞，'},
+  {t:'也卖一些人并不急着买的东西。'},
+  {t:'比如——'},
+  {t:'一会儿时间。'},
   {dir:'scene', s:'door'},
-  {t:{zh:'自动门打开。',en:'The automatic door opens.'}},
-  {t:{zh:'叮——',en:'Ding —'}, cls:'sound'},
+  {t:'自动门打开。'},
+  {t:'叮——'},
   {dir:'scene', s:'warm'},
-  {t:{zh:'暖黄色的灯，亮着。',en:'A warm yellow lamp, glowing.'}},
-  {t:{zh:'你可以在这里买一杯咖啡。',en:'You can buy a coffee here.'}},
-  {t:{zh:'也可以什么都不买。',en:'Or buy nothing at all.'}},
-  {t:{zh:'可以说话。',en:'You can talk.'}},
-  {t:{zh:'也可以什么都不说。',en:'Or say nothing at all.'}},
+  {t:'暖黄色的灯，亮着。'},
+  {t:'你可以在这里买一杯咖啡。'},
+  {t:'也可以什么都不买。'},
+  {t:'可以说话。'},
+  {t:'也可以什么都不说。'},
   {dir:'sound', s:'rain'},
-  {t:{zh:'雨，落在玻璃上。',en:'Rain, falling on the glass.'}},
-  {t:{zh:'我们没有办法让外面的世界变得温柔。',en:'We can’t make the outside world gentle.'}},
-  {t:{zh:'所以只好先把这里的灯开着。',en:'So we keep this lamp on, for now.'}},
+  {t:'雨，落在玻璃上。'},
+  {t:'我们没有办法让外面的世界变得温柔。'},
+  {t:'所以只好先把这里的灯开着。'},
   {dir:'title'},
-  {t:{zh:'欢迎回来。',en:'Welcome back.'}},
-  {t:{zh:'或者……',en:'Or…'}},
-  {t:{zh:'欢迎第一次来。',en:'welcome, for the first time.'}},
+  {t:'欢迎回来。'},
+  {t:'或者……'},
+  {t:'欢迎第一次来。'},
   {dir:'scene', s:'rainfront'},
-  {t:{zh:'店门前，雨还在下。',en:'In front of the shop, the rain still falls.'}},
-  {t:{zh:'而你，',en:'And you —'}},
-  {t:{zh:'是今晚留在这里的人。',en:'are the one staying here tonight.'}},
-  {t:{zh:'店长，开门吧。',en:'Keeper, open the door.'}}
+  {t:'店门前，雨还在下。'},
+  {t:'而你，'},
+  {t:'是今晚留在这里的人。'},
+  {t:'店长，开门吧。'}
 ];
 /* ---------- 电影式开场（原始：连续场景绘制 + 对话框 + 标题缓出） ---------- */
 let introActive=false, introCanvas=null, introX=null, introRain=[];
@@ -1432,16 +1247,14 @@ function introLoop(){
   renderStoreScene();
   requestAnimationFrame(introLoop);
 }
-function showIntroText(step){
-  const text = step.t[LANG]; const cls = step.cls || "";
-  introCurT = step; introFull = text; introChars = 0; introTyping = true;
-  const box = $("introBox"); box.className = cls;
-  $("introText").textContent = '';
-  $("introHint").style.display = 'none';
-  introTimer = setInterval(()=>{
+function showIntroText(text){
+  introFull=text; introChars=0; introTyping=true;
+  $("introText").textContent='';
+  $("introHint").style.display='none';
+  introTimer=setInterval(()=>{
     introChars++;
-    $("introText").textContent = introFull.slice(0, introChars);
-    if(introChars >= introFull.length){ clearInterval(introTimer); introTyping = false; $("introHint").style.display = 'block'; if(introIdx === introScript.length-1) showDoor(); }
+    $("introText").textContent=introFull.slice(0,introChars);
+    if(introChars>=introFull.length){ clearInterval(introTimer); introTyping=false; $("introHint").style.display='block'; if(introIdx===introScript.length-1) showDoor(); }
   }, 45);
 }
 function finishIntroText(){
@@ -1471,7 +1284,7 @@ function advanceIntro(){
   while(introIdx<introScript.length && introScript[introIdx].dir){ applyDir(introScript[introIdx]); introIdx++; }
   if(introIdx>=introScript.length) return;
   const step=introScript[introIdx];
-  showIntroText(step);
+  showIntroText(step.t);
 }
 function showDoor(){ introDoorShown=true; $("openDoorBtn").style.display='block'; $("introHint").style.display='none'; }
 function startIntro(){
@@ -1500,7 +1313,8 @@ $("openDoorBtn").onclick=(e)=>{ e.stopPropagation(); openDoor(); };
 function fitStage(){ const s=Math.min(window.innerWidth/W, window.innerHeight/H, 1.6); stage.style.transform="scale("+s+")"; }
 window.addEventListener("resize", fitStage);
 function showReturnMsg(){
-  narrate(S.lastLeave || pick(I18N[LANG].return_msgs));
+  const msgs=["昨晚你把Shelter的灯留到了很晚。","今天的店里，应该会比昨天暖和一点。","风把门口的伞吹倒了，又自己站了回去。","昨天的便签还在墙上，你写的那张在最上面。"];
+  narrate(S.lastLeave || pick(msgs));
 }
 function openDoor(){
   try{ if(AC && AC.state==="suspended") AC.resume(); }catch(e){}
@@ -1519,11 +1333,11 @@ function autoClose(){
   if(S.minutes>=1320){
     S.storeOpen=false;
     S.day+=1;
-    S.lastLeave = pick(I18N[LANG].close_shop);
+    S.lastLeave = pick(["今晚收店时，窗外还有一点亮。明天大概会是个好天气吧。","今天没有什么特别的事情。这样也很好。","忘记买草莓了。明天一定记得。"]);
     S.weather = pick(WEATHERS);
     S.minutes=480; S.dateStr=new Date().toISOString().slice(0,10);
     save();
-    narrate(t("lamp_msg"));
+    narrate("灯关了。明天见。");
     $("opening").style.display="flex"; $("opening").classList.remove("gone");
     startOpening();
   }
@@ -1544,7 +1358,7 @@ function frame(now){
   updateRainAudio();
   if(making) drawMake();
   $("hudTime").textContent=timeLabel();
-  $("hudWeather").textContent = S.weather.includes("雨") ? t("weather_rain") : t({晴:"weather_sunny",小雨:"weather_rain",阴:"weather_cloudy",雾:"weather_fog"}[S.weather]||"weather_sunny");
+  $("hudWeather").textContent=S.weather.includes("雨")?"雨":S.weather;
   const atCounter = customers.some(c=>c.state==="atCounter");
   $("btnMake").classList.toggle("hide", !(S.storeOpen && !making));
   $("btnCheck").classList.toggle("hide", !atCounter);
@@ -1553,56 +1367,23 @@ function frame(now){
   // 一次性空闲学习提示
   if(freeNow() && ALL_DRINKS.some(d=>!S.unlocked.includes(d)) && !S.seenEvents.includes("learntip") && !making){
     S.seenEvents.push("learntip"); save();
-    setTimeout(()=>narrate(t("learntip_msg")), 800);
+    setTimeout(()=>narrate("客人还没来。这种空档正好可以学做一道新饮品——点「制作饮品」就能看到想学的。"), 800);
   }
   requestAnimationFrame(frame);
 }
 
-/* ---------- 语言 / 帮助 / 引导 ---------- */
-let _firstHowto=false;
-function showHowto(){ applyLang(); $("howto").classList.remove("hidden"); }
-function closeHowto(){
-  $("howto").classList.add("hidden");
-  try{ localStorage.setItem("tls_seen_howto","1"); }catch(e){}
-  if(_firstHowto){ _firstHowto=false; if(!S.storeOpen) startOpening(); }
-}
-$("btnLang").onclick=()=>setLang(LANG==="zh"?"en":"zh");
-$("btnHelp").onclick=()=>showHowto();
-$("howtoClose").onclick=()=>closeHowto();
-
 /* ---------- 启动 ---------- */
 newDay();
 fitStage();
-applyLang();
 $("btnMute").classList.toggle("muted", S.mute);
 document.querySelectorAll("[data-close]").forEach(el=>el.onclick=()=>$(el.dataset.close).classList.add("hidden"));
 if(S.storeOpen){
   $("opening").style.display="none"; $("opening").classList.add("gone");
 } else {
-  const firstTime=(function(){ try{ return !localStorage.getItem("tls_seen_howto"); }catch(e){ return true; } })();
-  if(firstTime){ _firstHowto=true; showHowto(); }
-  else { startOpening(); }
+  startOpening();
 }
 requestAnimationFrame(frame);
 setInterval(()=>{ if(S.storeOpen && Math.random()<0.02) genDiary(pick(["book","note",""])); }, 30000);
 </script>
-<div id="howto" class="hidden">
-  <div id="howtoCard">
-    <h2 data-i18n="howto_title">怎么玩</h2>
-    <p class="sub" data-i18n="howto_sub">一家很小的店，卖牛奶、面包、雨伞，也卖一会儿时间。</p>
-    <ol>
-      <li data-i18n="howto_1"></li>
-      <li data-i18n="howto_2"></li>
-      <li data-i18n="howto_3"></li>
-      <li data-i18n="howto_4"></li>
-      <li data-i18n="howto_5"></li>
-      <li data-i18n="howto_6"></li>
-    </ol>
-    <p class="em" data-i18n="howto_tip">没有目标，也没有输赢。慢慢来，灯会一直开着。</p>
-    <div class="row">
-      <button class="btn" id="howtoClose" data-i18n="howto_close">开始</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
